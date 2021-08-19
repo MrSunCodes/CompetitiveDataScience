@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="AWSDocsDocPageApp">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Spot Instances - Amazon Elastic Compute Cloud</title>
+      <meta name="viewport" content="width=device-width,initial-scale=1" />
+      <meta name="assets_root" content="/assets" />
+      <meta name="target_state" content="using-spot-instances" />
+      <meta name="default_state" content="using-spot-instances" />
+      <link rel="icon" type="image/ico" href="/assets/images/favicon.ico" />
+      <link rel="shortcut icon" type="image/ico" href="/assets/images/favicon.ico" />
+      <link rel="canonical" href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html" />
+      <meta name="description" content="Learn how to lower your Amazon EC2 costs using Spot Instances." />
+      <meta name="deployment_region" content="IAD" />
+      <meta name="product" content="Amazon Elastic Compute Cloud" />
+      <meta name="guide" content="User Guide for Linux Instances" />
+      <meta name="locales" content="de_de:Deutsch/en_us:English/es_es:Español/fr_fr:Français/it_it:Italiano/ja_jp:日本語/ko_kr:한국어/pt_br:Português/zh_cn:中文 (简体)/zh_tw:中文 (繁體)" />
+      <meta name="abstract" content="Use Amazon EC2 to configure, launch, and manage virtual servers in the AWS cloud." />
+      <meta name="guide-locale" content="en_us" />
+      <meta name="tocs" content="toc-contents.json" />
+      <meta name="feedback-item" content="EC2" />
+      <meta name="this_doc_product" content="Amazon Elastic Compute Cloud" />
+      <meta name="this_doc_guide" content="User Guide for Linux Instances" />
+      <link href="/assets/css/vendor4.css?version=2020.09.30" rel="stylesheet" />
+      <link href="/assets/css/awsdocs-common.css?version=2020.09.30" rel="stylesheet" /><script type="text/javascript" src="/assets/js/vendor3.js?version=2020.09.30" defer=""></script><script type="text/javascript" src="/assets/js/vendor4.js?version=2020.09.30" defer=""></script><script type="text/javascript" src="/assets/js/vendor1.js?version=2020.09.30" defer=""></script><script type="text/javascript" src="/assets/js/awsdocs-common.js?version=2020.09.30" defer=""></script><script type="text/javascript" src="/assets/js/awsdocs-doc-app.js?version=2020.09.30" defer=""></script></head>
+   <body class="awsdocs awsui">
+      <div class="awsdocs-container">
+         <awsdocs-header></awsdocs-header>
+         <awsui-app-layout id="app-layout" class="awsui-util-no-gutters" ng-controller="ContentController as $ctrl" header-selector="awsdocs-header" navigation-hide="false" navigation-width="$ctrl.navWidth" navigation-open="$ctrl.navOpen" navigation-change="$ctrl.onNavChange($event)" tools-hide="$ctrl.hideTools" tools-width="$ctrl.toolsWidth" tools-open="$ctrl.toolsOpen" tools-change="$ctrl.onToolsChange($event)">
+            <div id="guide-toc" dom-region="navigation">
+               <awsdocs-toc></awsdocs-toc>
+            </div>
+            <div id="main-column" dom-region="content" tabindex="-1">
+               <awsdocs-view class="awsdocs-view">
+                  <div id="awsdocs-content">
+                     <head>
+                        <title>Spot Instances - Amazon Elastic Compute Cloud</title>
+                        <meta name="pdf" content="ec2-ug.pdf#using-spot-instances" />
+                        <meta name="kindle" content="https://www.amazon.com/dp/B076452RSZ" />
+                        <meta name="github" content="https://github.com/awsdocs/amazon-ec2-user-guide/tree/master/doc_source/using-spot-instances.md" />
+                        <meta name="rss" content="amazon-ec2-release-notes.rss" />
+                        <meta name="forums" content="http://forums.aws.amazon.com/forum.jspa?forumID=30" />
+                        <meta name="feedback" content="https://docs.aws.amazon.com/forms/aws-doc-feedback?hidden_service_name=EC2&amp;topic_url=http://docs.aws.amazon.com/en_us/AWSEC2/latest/UserGuide/using-spot-instances.html" />
+                        <meta name="feedback-yes" content="feedbackyes.html?topic_url=http://docs.aws.amazon.com/en_us/AWSEC2/latest/UserGuide/using-spot-instances.html" />
+                        <meta name="feedback-no" content="feedbackno.html?topic_url=http://docs.aws.amazon.com/en_us/AWSEC2/latest/UserGuide/using-spot-instances.html" />
+                        <meta name="keywords" content="EC2,Amazon EC2,EC2 instance,instance,VM,virtual machine" />
+                     </head>
+                     <body>
+                        <div id="main">
+                           <div style="display: none"><a href="ec2-ug.pdf#using-spot-instances" target="_blank" rel="noopener noreferrer" title="Open PDF"></a><a target="_blank" rel="noopener noreferrer" href="https://www.amazon.com/dp/B076452RSZ" title="Open Kindle"></a><a href="https://github.com/awsdocs/amazon-ec2-user-guide/tree/master/doc_source/using-spot-instances.md" target="_blank" rel="noopener noreferrer" title="Edit this page on GitHub"></a></div>
+                           <div id="breadcrumbs" class="breadcrumb"><a href="http://aws.amazon.com">AWS</a><a href="/index.html">Documentation</a><a href="/ec2/index.html">Amazon EC2</a><a href="concepts.html">User Guide for Linux Instances</a></div>
+                           <div id="page-toc-src"><a href="#spot-features">Concepts</a><a href="#spot-get-started">How to get started</a><a href="#spot-related-services">Related services</a><a href="#spot-pricing">Pricing and savings</a></div>
+                           <div id="main-content" class="awsui-util-container">
+                              <div id="main-col-body">
+                                 <awsdocs-language-banner data-service="$ctrl.pageService"></awsdocs-language-banner>
+                                 <h1 class="topictitle" id="using-spot-instances">Spot Instances</h1>
+                                 <div class="awsdocs-page-header-container">
+                                    <awsdocs-page-header></awsdocs-page-header>
+                                    <awsdocs-filter-selector id="awsdocs-filter-selector"></awsdocs-filter-selector>
+                                 </div>
+                                 <p>A Spot Instance is an instance that uses spare EC2 capacity that is available for
+                                    less than the
+                                    		On-Demand price. Because Spot Instances enable you to request unused EC2 instances
+                                    at steep
+                                    		discounts, you can lower your Amazon EC2 costs significantly. The hourly price for
+                                    a Spot Instance is
+                                    		called a Spot price. The Spot price of each instance type in each Availability Zone
+                                    is set
+                                    		by Amazon EC2, and is adjusted gradually based on the long-term supply of and demand
+                                    for Spot Instances.
+                                    		Your Spot Instance runs whenever capacity is available and the maximum price per
+                                    hour for your
+                                    		request exceeds the Spot price.
+                                 </p>
+                                 <p>Spot Instances are a cost-effective choice if you can be flexible about when your
+                                    applications run
+                                    		and if your applications can be interrupted. For example, Spot Instances are well-suited
+                                    for data
+                                    		analysis, batch jobs, background processing, and optional tasks. For more information,
+                                    see
+                                    			<a href="https://aws.amazon.com/ec2/spot-instances/" rel="noopener noreferrer" target="_blank"><span>Amazon EC2
+                                          		Spot Instances</span><awsui-icon class="awsdocs-link-icon" name="external"></awsui-icon></a>.
+                                 </p>
+                                 <p><b>Topics</b></p>
+                                 <div class="itemizedlist">
+                                    		 
+                                    		 
+                                    		 
+                                    		 
+                                    	
+                                    <ul class="itemizedlist" type="disc">
+                                       <li class="listitem">
+                                          			
+                                          <p><a href="#spot-features">Concepts</a></p>
+                                          		
+                                       </li>
+                                       <li class="listitem">
+                                          			
+                                          <p><a href="#spot-get-started">How to get started</a></p>
+                                          		
+                                       </li>
+                                       <li class="listitem">
+                                          			
+                                          <p><a href="#spot-related-services">Related services</a></p>
+                                          		
+                                       </li>
+                                       <li class="listitem">
+                                          			
+                                          <p><a href="#spot-pricing">Pricing and savings</a></p>
+                                          		
+                                       </li>
+                                    </ul>
+                                 </div>
+                                 		
+                                 <h2 id="spot-features">Concepts</h2>
+                                 		
+                                 <p>Before you get started with Spot Instances, you should be familiar with the following
+                                    			concepts:
+                                 </p>
+                                 		
+                                 <div class="itemizedlist">
+                                    			 
+                                    			 
+                                    			 
+                                    			 
+                                    			 
+                                    		
+                                    <ul class="itemizedlist" type="disc">
+                                       <li class="listitem">
+                                          				
+                                          <p><em>Spot capacity pool</em> – A set of unused EC2 instances with the
+                                             					same instance type (for example, <code class="code">m5.large</code>) and Availability
+                                             					Zone.
+                                          </p>
+                                          			
+                                       </li>
+                                       <li class="listitem">
+                                          				
+                                          <p><em>Spot price</em> – The current price of a Spot Instance per
+                                             					hour.
+                                          </p>
+                                          			
+                                       </li>
+                                       <li class="listitem">
+                                          				
+                                          <p><em>Spot Instance request</em> – Requests a Spot Instance. The request provides the
+                                             					maximum price per hour that you are willing to pay for a Spot Instance. If you
+                                             don't
+                                             					specify a maximum price, the default maximum price is the On-Demand price. When
+                                             					the maximum price per hour for your request exceeds the Spot price, Amazon EC2
+                                             					fulfills your request if capacity is available. A Spot Instance request is either
+                                             						<em>one-time</em> or <em>persistent</em>. Amazon EC2
+                                             					automatically resubmits a persistent Spot Instance request after the Spot Instance
+                                             associated with
+                                             					the request is terminated.
+                                          </p>
+                                          			
+                                       </li>
+                                       <li class="listitem">
+                                          				
+                                          <p><em>EC2 instance rebalance recommendation</em> - Amazon EC2 emits an
+                                             					instance rebalance recommendation signal to notify you that a Spot Instance is
+                                             at an
+                                             					elevated risk of interruption. This signal gives you the opportunity to
+                                             					proactively rebalance your workloads across existing or new Spot Instances without
+                                             having
+                                             					to wait for the two-minute Spot Instance interruption notice.
+                                          </p>
+                                          			
+                                       </li>
+                                       <li class="listitem">
+                                          				
+                                          <p><em>Spot Instance interruption</em> – Amazon EC2 terminates, stops, or hibernates your
+                                             					Spot Instance when capacity is no longer available or the Spot price exceeds
+                                             the maximum
+                                             					price for your request. Amazon EC2 provides a Spot Instance interruption notice,
+                                             which gives
+                                             					the instance a two-minute warning before it is interrupted.
+                                          </p>
+                                          			
+                                       </li>
+                                    </ul>
+                                 </div>
+                                 
+                                 		 
+                                 			
+                                 <h3 id="key-differences-spot-on-demand">Key differences between Spot Instances and
+                                    					On-Demand Instances
+                                 </h3>
+                                 			
+                                 <p>The following table lists the key differences between Spot Instances and On-Demand
+                                    Instances.
+                                 </p>
+                                 			
+                                 <div class="table-container">
+                                    <div class="table-contents">
+                                       <table id="w628aac17c15c22c11b7b5">
+                                          <thead>
+                                             						
+                                             <tr>
+                                                							
+                                                <th></th>
+                                                							
+                                                <th>Spot Instances</th>
+                                                							
+                                                <th>On-Demand Instances</th>
+                                                						
+                                             </tr>
+                                             					
+                                          </thead>
+                                          						
+                                          <tr>
+                                             							
+                                             <td>
+                                                								
+                                                <p>Launch time</p>
+                                                							
+                                             </td>
+                                             							
+                                             <td>
+                                                								
+                                                <p>Can only be launched immediately if the Spot Instance request is active and capacity
+                                                   is
+                                                   									available.
+                                                </p>
+                                                							
+                                             </td>
+                                             							
+                                             <td>
+                                                								
+                                                <p>Can only be launched immediately if you make a manual launch
+                                                   									request and capacity is available.
+                                                </p>
+                                                							
+                                             </td>
+                                             						
+                                          </tr>
+                                          						
+                                          <tr>
+                                             							
+                                             <td>
+                                                								
+                                                <p>Available capacity</p>
+                                                							
+                                             </td>
+                                             							
+                                             <td>
+                                                								
+                                                <p>If capacity is not available, the Spot Instance request continues to automatically
+                                                   make the
+                                                   									launch request until capacity becomes available.
+                                                </p>
+                                                							
+                                             </td>
+                                             							
+                                             <td>
+                                                								
+                                                <p>If capacity is not available when you make a launch request,
+                                                   									you get an insufficient capacity error (ICE).
+                                                </p>
+                                                							
+                                             </td>
+                                             						
+                                          </tr>
+                                          						
+                                          <tr>
+                                             							
+                                             <td>
+                                                								
+                                                <p>Hourly price</p>
+                                                							
+                                             </td>
+                                             							
+                                             <td>
+                                                								
+                                                <p>The hourly price for Spot Instances varies based on demand.</p>
+                                                							
+                                             </td>
+                                             							
+                                             <td>
+                                                								
+                                                <p>The hourly price for On-Demand Instances is static.</p>
+                                                							
+                                             </td>
+                                             						
+                                          </tr>
+                                          						
+                                          <tr>
+                                             							
+                                             <td>Rebalance recommendation</td>
+                                             							
+                                             <td>The signal that Amazon EC2 emits for a running  Spot Instance when the instance
+                                                								is at an elevated risk of interruption.
+                                             </td>
+                                             							
+                                             <td>You determine when an On-Demand Instance is interrupted (stopped, hibernated,
+                                                								or terminated).
+                                             </td>
+                                             						
+                                          </tr>
+                                          						
+                                          <tr>
+                                             							
+                                             <td>
+                                                								
+                                                <p>Instance interruption</p>
+                                                							
+                                             </td>
+                                             							
+                                             <td>
+                                                								
+                                                <p>You can stop and start an Amazon EBS-backed Spot Instance. In addition, the Amazon
+                                                   EC2 Spot service can
+                                                   										<a href="./spot-interruptions.html">interrupt</a> an
+                                                   									individual Spot Instance if capacity is no longer available, the Spot
+                                                   									price exceeds your maximum price, or demand for Spot Instances increases.
+                                                   
+                                                </p>
+                                                							
+                                             </td>
+                                             							
+                                             <td>
+                                                								
+                                                <p>You determine when an On-Demand Instance is interrupted (stopped, hibernated, or
+                                                   									terminated).
+                                                </p>
+                                                							
+                                             </td>
+                                             						
+                                          </tr>
+                                          					
+                                       </table>
+                                    </div>
+                                 </div>
+                                 		 
+                                 
+                                 		 
+                                 			
+                                 <h3 id="spot-strategy">Strategies for using Spot Instances</h3>
+                                 			
+                                 <p>One strategy is to maintain a minimum level of guaranteed compute resources for your
+                                    				applications by launching a core group of On-Demand Instances, and supplementing
+                                    them with Spot Instances
+                                    				when the opportunity arises.
+                                 </p>
+                                 			
+                                 			
+                                 <div class="mediaobject">
+                                    				 
+                                    					<img src="images/spot_introduction.png" class="aws-docs-img-whiteBg aws-docs-img-padding" alt="&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;Compare On-Demand and Spot Instances&#xA;&#x9;&#x9;&#x9;&#x9;" />
+                                    				 
+                                    				 
+                                    			
+                                 </div>
+                                 			
+                                 			
+                                 <div class="mediaobject">
+                                    				
+                                    				 
+                                    			
+                                 </div>
+                                 		 
+                                 
+                                 	 
+                                 		
+                                 <h2 id="spot-get-started">How to get started</h2>
+                                 		
+                                 <p>The first thing you need to do is get set up to use Amazon EC2. It can also be helpful
+                                    to
+                                    			have experience launching On-Demand Instances before launching Spot Instances.
+                                 </p>
+                                 		
+                                 <div class="itemizedlist">
+                                    			
+                                    <p class="title"><b>Get up and running</b></p>
+                                    			 
+                                    			 
+                                    		
+                                    <ul class="itemizedlist" type="disc">
+                                       <li class="listitem">
+                                          				
+                                          <p><a href="./get-set-up-for-amazon-ec2.html">Set up to use Amazon EC2</a></p>
+                                          			
+                                       </li>
+                                       <li class="listitem">
+                                          				
+                                          <p><a href="./EC2_GetStarted.html">Tutorial: Get started with Amazon EC2 Linux instances</a></p>
+                                          			
+                                       </li>
+                                    </ul>
+                                 </div>
+                                 		
+                                 <div class="itemizedlist">
+                                    			
+                                    <p class="title"><b>Spot basics</b></p>
+                                    			 
+                                    		
+                                    <ul class="itemizedlist" type="disc">
+                                       <li class="listitem">
+                                          				
+                                          <p><a href="./how-spot-instances-work.html">How Spot Instances work</a>
+                                             				
+                                          </p>
+                                          			
+                                       </li>
+                                    </ul>
+                                 </div>
+                                 		
+                                 <div class="itemizedlist">
+                                    			
+                                    <p class="title"><b>Working with Spot Instances</b></p>
+                                    			 
+                                    			 
+                                    			 
+                                    		
+                                    <ul class="itemizedlist" type="disc">
+                                       <li class="listitem">
+                                          				
+                                          <p><a href="./spot-interruptions.html#using-spot-instances-managing-interruptions">Prepare for interruptions</a></p>
+                                          			
+                                       </li>
+                                       <li class="listitem">
+                                          				
+                                          <p><a href="./spot-requests.html#using-spot-instances-request">Create a Spot Instance request</a></p>
+                                          			
+                                       </li>
+                                       <li class="listitem">
+                                          				
+                                          <p><a href="./spot-request-status.html#get-spot-instance-request-status">Get request status information</a></p>
+                                          			
+                                       </li>
+                                    </ul>
+                                 </div>
+                                 	 
+                                 		
+                                 <h2 id="spot-related-services">Related services</h2>
+                                 		
+                                 <p>You can provision Spot Instances directly using Amazon EC2. You can also provision
+                                    Spot Instances using other
+                                    			services in AWS. For more information, see the following documentation.
+                                 </p>
+                                 		
+                                 <div class="variablelist">
+                                    			 
+                                    			 
+                                    			 
+                                    			 
+                                    			 
+                                    		
+                                    <dl>
+                                       				
+                                       <dt><span class="term">Amazon EC2 Auto Scaling and Spot Instances</span></dt>
+                                       				
+                                       <dd>
+                                          					
+                                          <p>You can create launch templates or configurations with the maximum price
+                                             						that you are willing to pay, so that Amazon EC2 Auto Scaling can launch Spot
+                                             Instances. For more
+                                             						information, see <a href="https://docs.aws.amazon.com/autoscaling/latest/userguide/asg-launch-spot-instances.html">Requesting Spot Instances for fault-tolerant and flexible applications</a> and <a href="https://docs.aws.amazon.com/autoscaling/latest/userguide/asg-purchase-options.html">Auto Scaling groups with multiple instance types and purchase options</a> in the
+                                             							<em>Amazon EC2 Auto Scaling User Guide</em>.
+                                          </p>
+                                          				
+                                       </dd>
+                                       			 
+                                       				
+                                       <dt><span class="term">Amazon EMR and Spot Instances</span></dt>
+                                       				
+                                       <dd>
+                                          					
+                                          <p>There are scenarios where it can be useful to run Spot Instances in an Amazon EMR
+                                             						cluster. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-instance-purchasing-options.html#emr-spot-instances">Spot Instances</a> and <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-instances-guidelines.html#emr-plan-spot-instances">When Should You Use Spot Instances</a> in the
+                                             							<em>Amazon EMR Management Guide</em>.
+                                          </p>
+                                          				
+                                       </dd>
+                                       			 
+                                       				
+                                       <dt><span class="term">AWS CloudFormation templates</span></dt>
+                                       				
+                                       <dd>
+                                          					
+                                          <p>AWS CloudFormation enables you to create and manage a collection of AWS resources
+                                             						using a template in JSON format. AWS CloudFormation templates can include the
+                                             maximum
+                                             						price you are willing to pay. For more information, see <a href="https://aws.amazon.com/blogs/aws/ec2-spot-instance-updates-auto-scaling-and-cloudformation-integration-new-sample-app-1/" rel="noopener noreferrer" target="_blank"><span>EC2 Spot Instance Updates - Auto Scaling and CloudFormation
+                                                   						Integration</span><awsui-icon class="awsdocs-link-icon" name="external"></awsui-icon></a>.
+                                          </p>
+                                          				
+                                       </dd>
+                                       			 
+                                       				
+                                       <dt><span class="term">AWS SDK for Java</span></dt>
+                                       				
+                                       <dd>
+                                          					
+                                          <p>You can use the Java programming language to manage your Spot Instances. For more
+                                             						information, see <a href="https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/tutorial-spot-instances-java.html">Tutorial: Amazon
+                                                							EC2 Spot Instances</a> and <a href="https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/tutorial-spot-adv-java.html">Tutorial: Advanced
+                                                							Amazon EC2 Spot Request Management</a>.
+                                          </p>
+                                          				
+                                       </dd>
+                                       			 
+                                       				
+                                       <dt><span class="term">AWS SDK for .NET</span></dt>
+                                       				
+                                       <dd>
+                                          					
+                                          <p>You can use the .NET programming environment to manage your Spot Instances. For
+                                             						more information, see <a href="https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/tutorial-spot-instances-net.html">Tutorial: Amazon
+                                                							EC2 Spot Instances</a>.
+                                          </p>
+                                          				
+                                       </dd>
+                                       			
+                                    </dl>
+                                 </div>
+                                 	 
+                                 		
+                                 <h2 id="spot-pricing">Pricing and savings</h2>
+                                 		
+                                 <p>You pay the Spot price for Spot Instances, which is set by Amazon EC2 and adjusted
+                                    gradually based
+                                    			on the long-term supply of and demand for Spot Instances. If the maximum price
+                                    for your request
+                                    			exceeds the current Spot price, Amazon EC2 fulfills your request if capacity is
+                                    available.
+                                    			Your Spot Instances run until you terminate them, capacity is no longer available,
+                                    the Spot price
+                                    			exceeds your maximum price, or your Amazon EC2 Auto Scaling group terminates them
+                                    during <a href="https://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html#as-lifecycle-scale-in">scale
+                                       				in</a>.
+                                 </p>
+                                 		
+                                 <p>If you or Amazon EC2 interrupts a running Spot Instance, you are charged for the seconds
+                                    used or the
+                                    			full hour, or you receive no charge, depending on the operating system used and
+                                    who
+                                    			interrupted the Spot Instance. For more information, see <a href="./spot-interruptions.html#billing-for-interrupted-spot-instances">Billing for interrupted Spot Instances</a>.
+                                 </p>
+                                 
+                                 		 
+                                 			
+                                 <h3 id="spot-pricing-view-prices">View prices</h3>
+                                 			
+                                 <p>To view the current (updated every five minutes) lowest Spot price per AWS Region
+                                    				and instance type, see the <a href="https://aws.amazon.com/ec2/spot/pricing/" rel="noopener noreferrer" target="_blank"><span>Amazon EC2 Spot Instances
+                                          					Pricing</span><awsui-icon class="awsdocs-link-icon" name="external"></awsui-icon></a> page.
+                                 </p>
+                                 			
+                                 <p>To view the Spot price history for the past three months, use the Amazon EC2 console
+                                    or
+                                    				the <a href="https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-spot-price-history.html">describe-spot-price-history</a> command (AWS CLI). For more information, see
+                                    					<a href="./using-spot-instances-history.html">Spot Instance pricing history</a>.
+                                 </p>
+                                 			
+                                 <p>We independently map Availability Zones to codes for each AWS account. Therefore,
+                                    				you can get different results for the same Availability Zone code (for example,
+                                    					<code class="code">us-west-2a</code>) between different accounts.
+                                 </p>
+                                 		 
+                                 
+                                 		 
+                                 			
+                                 <h3 id="spot-pricing-view-savings">View savings</h3>
+                                 			
+                                 <p>You can view the savings made from using Spot Instances for a single Spot Fleet or
+                                    for all Spot Instances.
+                                    				You can view the savings made in the last hour or the last three days, and you
+                                    can
+                                    				view the average cost per vCPU hour and per memory (GiB) hour. Savings are estimated
+                                    				and may differ from actual savings because they do not include the billing
+                                    				adjustments for your usage. For more information about viewing savings information,
+                                    				see <a href="./spot-savings.html">Savings from purchasing Spot Instances</a>.
+                                 </p>
+                                 		 
+                                 
+                                 		 
+                                 			
+                                 <h3 id="spot-pricing-view-billing">View billing</h3>
+                                 			
+                                 <p>Your bill provides details about your service usage. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/getting-viewing-bill.html">Viewing your bill</a> in the
+                                    					<em>AWS Billing and Cost Management User Guide</em>.
+                                 </p>
+                                 		 
+                                 	
+                                 <awsdocs-copyright class="copyright-print"></awsdocs-copyright>
+                                 <awsdocs-thumb-feedback right-edge="{{$ctrl.thumbFeedbackRightEdge}}"></awsdocs-thumb-feedback>
+                              </div>
+                              <noscript>
+                                 <div>
+                                    <div>
+                                       <div>
+                                          <div id="js_error_message">
+                                             <p><img src="https://d1ge0kk1l5kms0.cloudfront.net/images/G/01/webservices/console/warning.png" alt="Warning" /> <strong>Javascript is disabled or is unavailable in your
+                                                   browser.</strong></p>
+                                             <p>To use the Amazon Web Services Documentation, Javascript must be
+                                                enabled. Please refer to your browser's Help pages for instructions.
+                                             </p>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </noscript>
+                              <div id="main-col-footer" class="awsui-util-font-size-0">
+                                 <div id="doc-conventions"><a target="_top" href="/general/latest/gr/docconventions.html">Document Conventions</a></div>
+                                 <div class="prev-next">
+                                    <div id="previous" class="prev-link" accesskey="p" href="./ec2-scheduled-instances.html">Scheduled Instances</div>
+                                    <div id="next" class="next-link" accesskey="n" href="./spot-best-practices.html">Best practices</div>
+                                 </div>
+                              </div>
+                              <awsdocs-page-utilities></awsdocs-page-utilities>
+                           </div>
+                           <div id="quick-feedback-yes" style="display: none;">
+                              <div class="title">Did this page help you? - Yes</div>
+                              <div class="content">
+                                 <p>Thanks for letting us know we're doing a good
+                                    job!
+                                 </p>
+                                 <p>If you've got a moment, please tell us what we did right
+                                    so we can do more of it.
+                                 </p>
+                                 <p>
+                                    <awsui-button id="fblink" target="_blank" text="Feedback" click="linkClick($event)" href="https://docs.aws.amazon.com/forms/aws-doc-feedback?hidden_service_name=EC2&amp;topic_url=https://docs.aws.amazon.com/en_us/AWSEC2/latest/UserGuide/using-spot-instances.html"></awsui-button>
+                                 </p>
+                              </div>
+                           </div>
+                           <div id="quick-feedback-no" style="display: none;">
+                              <div class="title">Did this page help you? - No</div>
+                              <div class="content">
+                                 <p>Thanks for letting us know this page needs work. We're
+                                    sorry we let you down.
+                                 </p>
+                                 <p>If you've got a moment, please tell us how we can make
+                                    the documentation better.
+                                 </p>
+                                 <p>
+                                    <awsui-button id="fblink" target="_blank" text="Feedback" click="linkClick($event)" href="https://docs.aws.amazon.com/forms/aws-doc-feedback?hidden_service_name=EC2&amp;topic_url=https://docs.aws.amazon.com/en_us/AWSEC2/latest/UserGuide/using-spot-instances.html"></awsui-button>
+                                 </p>
+                              </div>
+                           </div>
+                        </div>
+                     </body>
+                  </div>
+               </awsdocs-view>
+               <div class="page-loading-indicator" id="page-loading-indicator">
+                  <awsui-spinner size="large"></awsui-spinner>
+               </div>
+            </div>
+            <div id="tools-panel" dom-region="tools">
+               <awsdocs-tools-panel id="awsdocs-tools-panel"></awsdocs-tools-panel>
+            </div>
+         </awsui-app-layout>
+         <awsdocs-cookie-banner class="doc-cookie-banner"></awsdocs-cookie-banner>
+         <!--
+                SiteCatalyst code version: H.25.2.
+                Copyright 1996-2012 Adobe, Inc. All Rights Reserved
+                More info available at http://www.omniture.com
+            --><script language="JavaScript" type="text/javascript">
+var awsdocs = awsdocs || {};
+awsdocs.prop66 = 'Amazon Elastic Compute Cloud';
+awsdocs.prop65 =  'User Guide for Linux Instances';
+            </script><script src="https://a0.awsstatic.com/s_code/js/3.0/awshome_s_code.js" language="JavaScript" type="text/javascript"></script>
+         <!--/DO NOT REMOVE/-->
+         <!--End SiteCatalyst code version: H.25.2.--></div>
+   </body>
+</html>

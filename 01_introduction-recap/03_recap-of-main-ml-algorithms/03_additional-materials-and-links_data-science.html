@@ -1,0 +1,426 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KF85K6B');</script>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Algorithms &mdash; H2O 3.32.1.5 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="H2O 3.32.1.5 documentation" href="index.html"/>
+        <link rel="next" title="Supported Data Types" href="data-science/supported-data-types.html"/>
+        <link rel="prev" title="Tokenize Strings" href="data-munging/tokenize.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+<script type='text/javascript' src='//cdn.bizible.com/scripts/bizible.js' async=''></script></head>
+
+<body class="wy-body-for-nav" role="document"><noscript><iframe src='https://www.googletagmanager.com/ns.html?id=GTM-KF85K6B' height='0' width='0' style='display:none;visibility:hidden'></iframe></noscript>
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.32.1.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="welcome.html">Welcome to H2O 3</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api-changes.html">API-Related Changes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quick-start-videos.html">Quick Start Videos</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cloud-integration.html">Cloud Integration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="downloading.html">Downloading &amp; Installing H2O</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="starting-h2o.html">Starting H2O</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="h2o-client.html">H2O Clients</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-data-into-h2o.html">Getting Data into Your H2O Cluster</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data-munging.html">Data Manipulation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data-types">Data Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data-science/supported-data-types.html">Supported Data Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#common">Common</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data-science/quantiles.html">Quantiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/early_stopping.html">Early Stopping</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#supervised">Supervised</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="automl.html">AutoML: Automatic Machine Learning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/coxph.html">Cox Proportional Hazards (CoxPH)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/deep-learning.html">Deep Learning (Neural Networks)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/drf.html">Distributed Random Forest (DRF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/glm.html">Generalized Linear Model (GLM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/gam.html">Generalized Additive Models (GAM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/gbm.html">Gradient Boosting Machine (GBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/naive-bayes.html">Naïve Bayes Classifier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/rulefit.html">RuleFit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/stacked-ensembles.html">Stacked Ensembles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/svm.html">Support Vector Machine (SVM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/xgboost.html">XGBoost</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#unsupervised">Unsupervised</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data-science/aggregator.html">Aggregator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/glrm.html">Generalized Low Rank Models (GLRM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/if.html">Isolation Forest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/k-means.html">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/pca.html">Principal Component Analysis (PCA)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#miscellaneous">Miscellaneous</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data-science/target-encoding.html">Target Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/tf-idf.html">TF-IDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data-science/word2vec.html">Word2vec</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="training-models.html">Training Models</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cross-validation.html">Cross-Validation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable-importance.html">Variable Importance</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="grid-search.html">Grid (Hyperparameter) Search</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="checkpointing-models.html">Checkpointing Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="performance-and-prediction.html">Performance and Prediction</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="automl.html">AutoML: Automatic Machine Learning</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="explain.html">Model Explainability</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="save-and-load-model.html">Saving, Loading, Downloading, and Uploading Models</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="productionizing.html">Productionizing H2O</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="flow.html">Using Flow - H2O’s Web UI</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">Downloading Logs</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">H2O Architecture</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Appendix A - Parameters</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api-reference.html">Appendix B - API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">H2O</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Algorithms</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com//h2oai/h2o-3/blob/master/h2o-docs/src/product/data-science.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="algorithms">
+<span id="data-science"></span><h1>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h1>
+<p>This section provides an overview of each algorithm available in H2O. For detailed information about the parameters that can be used for building models, refer to <a class="reference external" href="parameters.html">Appendix A - Parameters</a>.</p>
+<div class="section" id="data-types">
+<h2>Data Types<a class="headerlink" href="#data-types" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data-science/supported-data-types.html">Supported Data Types</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="common">
+<h2>Common<a class="headerlink" href="#common" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data-science/quantiles.html">Quantiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/early_stopping.html">Early Stopping</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="supervised">
+<h2>Supervised<a class="headerlink" href="#supervised" title="Permalink to this headline">¶</a></h2>
+<p>In supervised learning, the dataset is labeled with the answer that algorithm should come up with. Supervised learning takes input variables (x) along with an output variable (y). The output variable represents the column that you want to predict on. The algorithm then uses these variables to learn and approximate the mapping function from the input to the output. Supervised learning algorithms support classification and regression problems.</p>
+<p>H2O supports the following supervised algorithms:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="automl.html">AutoML: Automatic Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/coxph.html">Cox Proportional Hazards (CoxPH)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/deep-learning.html">Deep Learning (Neural Networks)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/drf.html">Distributed Random Forest (DRF)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/glm.html">Generalized Linear Model (GLM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/gam.html">Generalized Additive Models (GAM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/gbm.html">Gradient Boosting Machine (GBM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/naive-bayes.html">Naïve Bayes Classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/rulefit.html">RuleFit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/stacked-ensembles.html">Stacked Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/svm.html">Support Vector Machine (SVM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/xgboost.html">XGBoost</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="unsupervised">
+<h2>Unsupervised<a class="headerlink" href="#unsupervised" title="Permalink to this headline">¶</a></h2>
+<p>In unsupervised learning, the model is provided with a dataset that isn’t labeled - i.e., without an explicit outcome that the algorithm should return. In this case, the algorithm attempts to find patterns and structure in the data by extracting useful features. The model organizes the data in different ways, depending on the algorithm (clustering, anomaly detection, autoencoders, etc).</p>
+<p>H2O supports the following unsupervised algorithms:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data-science/aggregator.html">Aggregator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/glrm.html">Generalized Low Rank Models (GLRM)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/if.html">Isolation Forest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/k-means.html">K-Means Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/pca.html">Principal Component Analysis (PCA)</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="miscellaneous">
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data-science/target-encoding.html">Target Encoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/tf-idf.html">TF-IDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-science/word2vec.html">Word2vec</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="data-science/supported-data-types.html" class="btn btn-neutral float-right" title="Supported Data Types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="data-munging/tokenize.html" class="btn btn-neutral" title="Tokenize Strings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2021 H2O.ai.
+      Last updated on Aug 04, 2021.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'3.32.1.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
