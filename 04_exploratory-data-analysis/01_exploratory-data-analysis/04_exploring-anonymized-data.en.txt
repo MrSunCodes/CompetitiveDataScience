@@ -1,0 +1,156 @@
+[SOUND] In the previous video,
+we were working with the data for which we had a nice description. That is,
+we knew what the features were, and the data was given us as these
+without severe modifications. But, it's not always the case. The data can be anonymized,
+and obfuscated. In this video, we'll first discuss
+what is anonymized data, and why organizers decide to
+anonymize their data. And next, we will see what we
+as competitors can do about it. Sometimes we can decode the data, or if we can not we can try to guess,
+what is the type of feature. So, let's get to the discussion. Sometimes the organizers really want
+some information to be reviewed. So, they make an effort to
+export competition data, in a way one couldn't get
+while you're out of it. Yet all the features are preserved, and machinery model will be
+able to do it's job. For example, if a company wants
+someone to classify its document, but doesn't want to reveal
+the document's content. It can replace all the word occurrences
+with hash values of those words, like in the example you see here. In fact, it will not change a thing for
+a model based on bags of words. I will refer to Anonymized
+data as to any data which organizers intentionally changed. Although it is not completely correct,
+I will use this wording for any type of changes. In computations with tabular data, companies can try to hide
+information each column stores. Take a look at this data set. First, we don't have any
+meaningful names for the features. The names are replaced with some dummies,
+and we see some hash like values
+in columns x1 and x6. Most likely, organizers decided
+to hash some sensitive data. There are several things we can do
+while exploring the data in this case. First, we can try to decode or de-anonymize the data,
+in a legal way of course. That is, we can try to guess
+true meaning of the features. Sometimes de-anonymization
+is not possible, but what we almost surely can do,
+is to guess the type of the features, separating them into numeric,
+categorical, and so on. Then, we can try to find how
+features relate to each other. That can be a specific relation
+between a pair of features, or we can try to figure out if
+the features are grouped in some way. In this video we will concentrate
+on the first problem. In the next video we will discuss
+visualization tools, that we can use both for exploring individual
+features, and feature relations. Let's now get to an example
+how it was possible to decode the meaning of the feature in one
+local competition I took part. I want to tell you about
+a competition I took part. It was a local competition, and
+organizers literally didn't give competitors any information
+about a dataset. They just put the link to download data on
+the competition page, and nothing else. Let's read the data first, and basically what we see here is
+that the data is anonymized. The column names are like x something, and the values are hashes, and
+then the rest are numeric in here. But, well we don't know
+what they mean at all, and basically we don't
+what we are to predict. We only know that it is
+a multi-class classification task, and we have four labels. So, as long as we don't
+know what the data is, we can probably build a quick baseline. Let's import Random Forest Classifier. Yeah, of course we need to drop
+target label from our data frame, as it is included in there. We'll fill null values with minus 999, and let's encode all the categorical features, that we can find by looking at the types. Property of our data frame. We will encode them with Label Encoder,
+and it is easier to do with
+function factorize from Pandas. Let's feed to
+Random Forest Classifier on our data. And let's plot the feature importance's,
+and what we see here is that feature
+X8 looks like an interesting one. We should probably investigate
+it a little bit deeper. If we take the feature X8, and print it's mean, and estimate the value. They turn out to be quite close to 0,
+and 1 respectively, and it looks like this feature was
+tendered skilled by the organizers. And we don't see here exactly 0,
+and exactly 1, because probably training test was
+concatenated when on the latest scale. If we concatenate training test,
+then the mean will be exactly 0, and the std will be exactly 1. Okay, so let's also see are there any
+other repeated values in these features? We can do it with a value counts function. Let's print first 15
+rows of value counts out. And we can see that there
+are a lot of repeated values, they repeated a thousand times. All right, so we now know that
+this feature was standard scaled. Probably, we can try to scale it back. The original feature was multiplied by
+a number, and was shifted by a number. All we need to do is to find the shooting
+parameter, and the scaling parameter. But how do we do that,
+and it is really possible? Let's take unique values of the feature,
+and sort them. And let's print the difference
+between two consecutive numbers, in this sorted array. And look, it looks like the values
+are the same all the time. The distance between two consecutive
+unique values in this feature, was the same in the original data to. It was probably not 0.043 something, it was who knows,
+it could be 9 or 11 or 11.7, but it was the same between all the pairs,
+so assume that it was 1 because, well,
+1 looks like a natural choice. Let's divide our feature by
+this number 0.043 something, and if we do it, yes, we see that
+the differences become rather close to 1, they are not 1,
+only because of some numeric errors. So yes, if we divide our feature by
+this value, this is what you get. All right, so what else do we see here. We see that each number,
+it ends with the same values. Each positive number ends
+with this kind of value, and each negative with this, look. It looks like this fractional
+part was a part of the shifting parameter,
+let's just subtract it. And in fact if we subtract it,
+the data looks like an integers, actually. Like it was integer data, but
+again because of numeric errors, we see some weird numbers in here. Let's round the numbers,
+and that is what we get. This is actually on the first ten rows,
+not the whole feature. Okay, so what's next? What did we do so far? We found the scaling parameter,
+probably we were right, because the numbers became integers,
+and it's a good sign. We could be not right, because who knows,
+the scaling parameter could be 10 or 2 or again 11 and
+still the numbers will be integers. But, 1 looks like a good match. It couldn't be as random, I guess. But, how can we find
+the shifting parameter? We found only fractional part,
+can we find the other, and can we find the integer part, I mean? It's actually a hard question, because
+while you have a bunch of numbers in here, and you can probably build a hypothesis. It could be something, and the regular
+values for this something is like that, and we could probably scale it,
+shift it by this number. But it could be only an approximation,
+and not a hypothesis, and so our journey could
+really end up in here. But I was really lucky, and I will show it to you,
+so if you take your x8. I mean our feature, and
+print value counts, what we will see, we will this number 11, 17, 18, something. And then if we scroll down
+we will see this, -1968, and it definitely looks like
+year a of birth, right? Immediately I have a hypothesis, that this could be a text box where
+a person should enter his year of birth. And while most of the people really
+enter their year of birth, but one person entered zero. Or system automatically entered 0,
+when something wrong happened. And wow, that isn't the key. If we assume the value was originally 0, then the shifting parameter is
+exactly 9068, let's try it. Let's add 9068 to our data,
+and see the values. Again we will use value counts function,
+and we will sort sorted values. This is the minimum of the values,
+and in fact you see the minimum is 0, and all the values are not negative,
+and it looks really plausible. Take a look, 999,
+it's probably what people love to enter when they're asked to enter something,
+or this, 1899. It could be a default value for
+this textbook, it occurred so many times. And then we see some weird values in here. People just put them at random. And then, we see some kind of
+distribution over the dates. That are plausible for
+people who live now, like 1980. Well maybe 1938, I'm not sure about this, and yes of course we see some
+days from the future, but for sure it looks like a year of birth, right? Well the question, how can we use
+this information for the competition? Well again for linear models, you probably could make a new feature
+like age group, or something like that. But In this particular competition, it was no way to use this for,
+to use this knowledge. But, it was really fun to investigate. I hope you liked the example,
+but usually is really hard to recognize anything sensible like
+a year of birth anonymous features. The best we can do is to
+recognize the type of the feature. Is it categorical, numeric,
+text, or something else? Last week we saw that each data
+type should be treated differently, and more treatment depends
+on the model we want to use. That is why to make a stronger model, we
+should know what data we are working with. Even though we cannot understand
+what the features are about, we should at least detect the types
+of variables in the data. Take a look at this example, we don't
+have any meaningful companies, but still we can deduce what
+the feature types are. So, x1 looks like text or
+physical recorded, x2 and x3 are binary, x4 is numeric,
+x5 is either categorical or numeric. And more, if it's numeric it could
+be something like event calendars, because the values are integers. When the number of columns in data
+set is small, like in our example, we can just bring the table, and
+manually sort the types out. But, what if there are thousand
+of features in the data set? Very useful functions to
+facilitate our exploration, function d types from pandas guesses the
+types for each column in the data frame. Usually it groups all the columns
+into three categories, flawed, integer, and
+so called object type. If dtype function assigned
+flawed type to a feature, this feature is most likely to be numeric. Integer typed features can be either
+binary encoded with a zero or one. Event counters, or even categorical,
+encoded with the label encoder. Sometimes this function
+returns a type named object. And it's the most problematic,
+it can be anything, even an irregular numeric feature with
+missing values filled with some text. Try it on your data, and also check out a
+very similar in full function from Pandas. To deal with object types, it is useful to
+print the data and literally look at it. It is useful to check unique
+values with value counts function, and nulls location with
+isnull function at times. In this lesson, we were discussing two
+things we can do with anonymized features. We saw that sometimes, it's possible to decode features,
+find out what this feature really means. It doesn't matter if we understand
+the meaning of the features or not, we should guess the feature types,
+in order to pre-process features accordingly to the type we have,
+and selected model class. In the next video,
+we'll see a lot of colorful plots, and talk about visualization, and
+other tools for exploratory data analysis. [SOUND]

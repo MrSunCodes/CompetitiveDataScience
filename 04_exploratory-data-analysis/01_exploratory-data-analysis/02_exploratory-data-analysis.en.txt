@@ -1,0 +1,85 @@
+[MUSIC] Hi, in this lesson we
+will talk about the very first steps a good data scientist
+takes when he is given a new data set. Mainly, exploratory data analysis or
+EDA in short. By the end of this lesson, you will know,
+what are the most important things from data understanding and exploration
+prospective we need to pay attention to. This knowledge is required
+to build good models and achieve high places on the leader board. We will first discuss what exploratory
+data analysis is and why we need it. We will then go through important
+parts of EDA process and see examples of what we
+can discover during EDA. Next we will take a look at the tools
+we have to perform exploration. What plots to draw and
+what functions from pandas and matplotlib libraries can be useful for us. We will also briefly discuss a very
+basic data set cleaning process that is convenient to perform
+while exploring the data. And finally we'll go through
+exploration process for the Springleaf competition
+hosted on Kaggle some time ago. In this video we'll start talking
+about Exploratory Data Analysis. What is Exploratory Data Analysis? It's basically a process of looking
+into the data, understanding it and getting comfortable with it. Getting comfortable with a task,
+probably always the first thing you do. To solve a problem,
+you need to understand a problem, and to know what you
+are given to solve it. In data science, complete data
+understanding is required to generate powerful features and
+to build accurate models. In fact while you explore the data,
+you build an intuition about it. And when the data is intuitive for you, you can generate hypothesis
+about possible new features and eventually find some insights in the data
+which in turn can lead to a better score. We will see the example of what EDA
+can give us later in this lesson. Well, one may argue that
+there is another way to go. Read the data from the hard drive,
+never look at it and feed the classifier immediately.They use
+some pretty advanced modeling techniques, like mixing, stacking, and eventually get
+a pretty good score on the leaderboard. Although this approach sometimes works, it cannot take you to the very
+top positions and let you win. Top solutions always use advanced and
+aggressive modeling. But usually they have
+something more than that. They incorporated insights from the data,
+and to find those insights,
+they did a careful EDA. While we need to admit the raw
+computations where all you can do is modeling and EDA will not help
+you to build a better model. It is usually the case when
+the data is anonymized, encrypted, pre-processed, and obfuscated. But look it will any way need to perform
+EDA to realize that this is the case and you better spend more time on modeling and
+make a server busy for a month. One of the main EDA
+tools is Visualization. When we visualize the data,
+we immediately see the patterns. And with this, ask ourselves,
+what are those patterns? Why do we see them? And finally, how do we use those
+patters to build a better model? It also can be another way around. Maybe we come up with a particular
+hypothesis about the data. What do we do? We test it by making a visualization. In one of the next videos, we'll talk about the main visualization
+tools we can use for exploration. Just as a motivation example,
+I want to tell you about the competition, alexander D'yakonov, a former top one
+at Kagel took part some time ago. The interesting thing about this
+competition is that you do not need to do any modeling,
+if you understood your data well. In that competition,
+the objective was to predict whether a person will use the promo
+that a company offers him. So each role correspond to a particular
+promo received by a person. There are features that
+describe the person, for example his age, sex,
+is he married or not and so on. And there are features that describe
+the promo, the target is 0 or 1, will he use the promo or not. But, among all the features there
+were two especially interesting. The first one is, the number of
+promos sent by the person before. And the second is the number of
+promos the person had to use before. So let's take a particular user,
+say with index 13, and sort the rows by number
+of promos sent column. And now let's take a look
+at the difference at column the number of used promos
+between two consecutive rows. It is written here in diff column. And look, the values in diff column in
+most cases equal the target values. And in fact, there is no magic. Just think about
+the meaning of the columns. For example, for the second row we see
+that the person used one promo already but he was sent only one before that time. And that is why we know that he used the
+first promo and thus we have an answer for the first row. In general, if before the current
+promo the person used n promos and before the next promo he used that, we know that he used n + 1 promos then we
+realize that he used the current promo. And so the answer is 1. If we know that he used n
+promos before the next promo, exactly as before the current promo, then obviously he did not use
+the current promo and the answer is 0. Well, it's not clear what
+to do with the last row for every user, or when we have missing rows,
+but you see the point. We didn't even run the classifier,
+and we have 80% accuracy already. This would not be possible if we didn't
+do an EDA and didn't look into the data. Also as a remark, I should say
+that the presented method works because of mistake made by
+the organizers during data preparation. These mistakes are called leaks, and in competitions we are usually
+allowed to exploit them. We'll see more of these
+examples later in this course. So in this video we discussed the main
+reasons for performing an EDA. That is to get comfortable with the data
+and to find insights in magic features. We also saw an example where EDA and the data understanding was
+important to get a better score. And finally, the point to take away. When you start a competition,
+you better start with EDA, and not with hardcore modelling. We've had a lot of things to
+talk about in this lesson. So let´s move to the next video. [MUSIC]

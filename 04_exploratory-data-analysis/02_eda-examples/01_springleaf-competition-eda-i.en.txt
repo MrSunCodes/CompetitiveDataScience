@@ -1,0 +1,83 @@
+[MUSIC] So in this video,
+I will go through Springleaf data, it was a competition on Kaggle. In that competition,
+the competitors were to predict whether a client will respond to
+direct mail offer provided by Springleaf. So presumably,
+we'll have some features about client, some features about offer, and we'll
+need to predict 1 if he will respond and 0 if he will not, so let's start. We'll first import some libraries in here,
+define some functions, it's not very interesting. And finally, let's load the data and train our test one, and
+do a little bit of data overview. So the first thing we want to know about
+our data is the shapes of data tables, so let's bring the train shape,
+and test that test shape. What we see here, we have one
+150,000 objects, both in train and test sets, and about 2000
+features in both train and test. And what we see more than,
+we have one more feature in train, and as humans, just target can
+continue to move the train. So we should just keep it in mind and
+be careful, and drop this column when we feed our models. So let's examine training and test, so let's use this function had
+to print several rows of both. We see here we have ID column, and
+what's interesting here is that I see in training we have values 2, 4, 5,
+7, and in test we have 1, 3, 6, 9. And it seems like they
+are not overlapping, and I suppose the generation
+process was as following. So the organizers created a huge
+data set with 300,000 rules, and then they sampled at random,
+rows for the train and for the test. And that is basically how we
+get this train and test, and we have this column IG, it is row
+index in this original huge file. Then we have something categorical,
+then something numeric, numeric again, categorical, then
+something that can be numeric or binary. But you see has decimal part,
+so I don't know why, then some very strange values in here,
+and again, something categorical. And actually,
+we have a lot of in between, and yeah, we have target as the last column
+of the train set, so let's move on. Probably another thing we want to
+check is whether we have not a numbers in our data set, like nonce values,
+and we can do it in several ways. And one way we, let's compute how many NaNs are there for
+each object, for each row. So this is actually what we do here, and we print only the values for
+the first 15 rows. And so the row 0 has 25 NaNs, row 1 has 19 NaN,, and so on, but what's interesting here,
+six rows have 24 NaNs. It doesn't look like we got it in random, it's really unlikely to
+have these at random. So my hypothesis could be that
+the row order has some structure, so the rows are not shuffled, and
+that is why we have this kind of pattern. And that means that we
+probably could use row index as another feature for
+our classifier, so that is it. And the same, we can do with columns, so for each column, let's compute how
+many NaNs are there in each column. And we see that ID has 0 NaNs,
+then some 0s, and then we see that a lot of
+columns have the same 56 NaNs. And that is again something really
+strange, so either every column will have 56 NaNs, and so it's not magic,
+it's probably just how the things go. But if we know that there are a lot
+of columns, and every column have more different number of NaNs, then it's
+really unlikely to have a lot of columns nearer to each other in the data
+set with the same number of NaNs. So probably, our hypothesis could
+be here that the column order is not random, so
+we could probably investigate this. So we have about 2,000
+columns in this data, and it's a really huge number of columns. And it's really hard to work
+with this data set, and basically we don't have any names,
+so the data is only mice. As I told you,
+the first thing we can do is to determine the types of the data,
+so we will do it here. So we're first going to continue train and
+test on a huge data frame like the organizers had,
+it will have 300,000 rows. And then we'll first use
+a unique function to determine how many unique
+values each column has. And basically here we bring
+several values of what we found, and it seems like there are five columns
+that have only one unique number. So we can drop the,
+basically what we have here, we just find them in this line,
+and then we drop them. So next we want to remove
+duplicated features, but first, for convenience,
+fill not a numbers with something that we can find easily later, and
+then we do the following. So we create another data frame of size, of a similar shape as the training set. What we do we take
+a column from train set, we apply a label encoder,
+as we discussed in a previous video, and we basically store it
+in this new train set. So basically we get another
+data frame which is train, but label encoded train set. And having this data frame,
+we can easily find duplicated features, we just start iterating
+the features with two iterators. Basically, one is fixed and the second one
+goes from the next feature to the end. Then we try to compare the columns, the
+two columns that we're standing at, right. And if they are element wise the same,
+then we have duplicated columns, and basically that is how we fill up
+this dictionary of duplicated columns. We see it here, so
+we found that variable 9 is duplicated for input 8, and
+variable 18 again is duplicated for variable 8, and so on, and so we have
+really a lot of duplicates in here. So this loop, it took some time,
+so I prefer to dump the results to disk, so
+we can easily restore them. So I do it here, and
+then I basically drop those columns that we found from
+the train test data frame. So yeah, in the second video, we will go through some features and do some work to data set. [MUSIC]

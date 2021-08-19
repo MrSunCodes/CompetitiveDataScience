@@ -1,0 +1,82 @@
+[MUSIC] Hi, in this video we will discuss
+a little bit of dataset cleaning and see how to check if dataset is shuffled. It is important to understand that
+the competition data can be only apart of the data organizers have. The organizers could give us
+a fraction of objects they have or a fraction of features. And that is why we can have
+some issues with the data. For example, we can encounter a feature
+which takes the same value for every object in both train and test set. This could be due to
+the sampling procedure. For example, the future is a year, and the organizers exported
+us only one year of data. So in the original data
+that the organizers have, this future is not constant, but
+in the competition data it is constant. And obviously, it is not useful for
+the models and just occupy some memory. So we are about to remove
+such constant features. In this example data set
+feature of zero is constant. It can be the case that the feature
+is constant on the train set but how is different values on the test set. Again, it is better to remove such
+features completely since it is constant during training. In our dataset feature is f1. What is the problem, actually? For example, my new model can assign
+some weight to this future, so this future will be a part of the
+prediction formula, and this formula will be completely unreliable for the objects
+with the new values of that feature. For example, for
+the last row in our data set. J row, even if categorical feature is not
+constant on the train path but there were values that present only in the test data,
+we need to handle this situation properly. We need to decide,
+do these new values matter much or not? For example, we can simulate this
+situation with a validation set and compare the quality of the predictions
+on the objects with the syn feature values and
+objects with the new feature values. Maybe we will decide to remove
+the feature or maybe we will decide to create a separate model for
+the object with a new feature values. Sometimes there are duplicated
+numerical features that these two columns are completely identical. In our example data set,
+these columns f2 and f3. Obviously, we should leave only one of
+those two features since the other one will not give any new information to the
+model and will only slow down training. From a number of features, it's easy
+to check if two columns are the same. We just can compare them element wise. We can also have duplicated
+categorical features. The problem is that the features
+can be identical but their levels have different names. That is it can be possible to rename
+levels of one of the features and two columns will become identical. For example features f4 and f5. If we rename levels of the feature f5, C to A, A to B, and B to C. The result will look
+exactly as feature f4. But how do we find such
+duplicated features? Fortunately, it's quite easy, it will take us only one more
+line of code to find them. We need to label and code all
+the categorical features first, and then compare them as if they were numbers. The most important part
+here is label encoding. We need to do it right. We need to encode the features
+from top to bottom so that the first unique value we see gets
+label 1, the second gets 2 and so on. For example for feature f4, we will encode A with 1,
+B with 2 and C with 3. Now feature f5 will encode
+it differently C will be 1, A will be 2 and B will be 3. But after such encodings columns f4 and f5 turn out to be identical and
+we can remove one of them. Another important thing
+to check is if there are any duplicated rows in the train and
+test. Is to write a lot of duplicated rows
+that also have different target, it can be a sign the competition
+will be more like a roulette, and our validation will be different
+to public leader board score, and private standing will be rather random. Another possibility, duplicated rows
+can just be the result of a mistake. There was a competition where
+one row was repeated 100,000 times in the training data set. I'm not sure if it was intentional or
+not, but it was necessary to remove those duplicated rows to
+have a high score on the test set. Anyway, it's better to explain it to ourselves why do we
+observe such duplicated rows? This is a part of data
+understanding in fact. We should also check if train and
+test have common rows. Sometimes it can tell us something
+about data set generation process. And again we should probably think what
+could be the reason for those duplicates? Another thing we can do,
+we can set labels manually for the test rows that
+are present in the train set. Finally, it is very useful to check
+that the data set is shuffled, because if it is not then, there is
+a high chance to find data leakage. We'll have a special topic about
+date leakages later, but for now we'll just discuss
+that the data is shuffled. What we can do is we can plug a feature or
+target vector versus row index. We can optionally smooth
+the values using running average. On this slide rolling target
+value from pairs competition is plotted while mean target value
+is shown with dashed blue line. If the data was shuffled properly we
+would expect some kind of oscillation of the target values around
+the mean target value. But in this case, it looks like
+the end of the train set is much different to the start,
+and we have some patterns. Maybe the information from this particular
+plot will not advance our model. But once again,
+we should find an explanation for all extraordinary things we observe. Maybe eventually, we will find something
+that will lead us to the first place. Finally, I want to encourage
+you one more time to visualize every possible
+thing in a dataset. Visualizations will lead
+you to magic features. So this is the last slide for this lesson. Hope you've learned something new and
+excited about it. Here's a whole list of
+topics we've discussed. You can pause this video and try to remember what we were
+talking about and where. See you later. [MUSIC]
