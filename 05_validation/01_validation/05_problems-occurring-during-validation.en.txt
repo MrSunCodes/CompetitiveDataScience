@@ -1,0 +1,224 @@
+[SOUND] Hi and welcome back. In the previous videos we discussed
+the concept of validation and overfitting. And discussed how to chose
+validation strategy based on the properties of data we have. And finally we learned to identify
+data split made by organizers. After all this work being done,
+we honestly expect that the relation will, in a way, substitute a leaderboard for us. That is the score we see on
+the validation will be the same for the private leaderboard. Or at least, if we improve our model and validation, there will be improvements
+on the private leaderboard. And this is usually true, but
+sometimes we encounter some problems here. In most cases these problems can
+be divided into two big groups. In the first group are the problems
+we encounter during local validation. Usually they are caused by
+inconsistency of the data, a widespread example is getting different
+optimal parameters for different faults. In this case we need to make
+more thorough validation. The problems from the second group, often reveal themselves only when we
+send our submissions to the platform. And observe that scores on the validation
+and on the leaderboard don't match. In this case, the problem usually occurs because we can't mimic the exact
+train test split on our validation. These are tough problems, and we
+definitely want to be able to handle them. So before we start,
+let me provide an overview of this video. For both validation and submission
+stages we will discuss main problems, their causes, how to handle them. And then, we'll talk a bit about when
+we can expect a leaderboard shuffle. Let's start with discussion
+of validation stage problems. Usually, they attract our
+attention during validation. Generally, the main problem is
+a significant difference in scores and optimal parameters for
+different train validation splits. Let's start with an example. So we can easily explain this problem. Consider that we need to predict
+sales in a shop in February. Say we have target values for the last year, and, usually,
+we will take last month in the validation. This means January, but clearly January
+has much more holidays than February. And people tend to buy more, which causes
+target values to be higher overall. And that mean squared error
+of our predictions for January will be greater than for February. Does this mean that the module
+will perform worse for February? Probably not,
+at least not in terms of overfitting. As we can see, sometimes this kind
+of model behavior can be expected. But what if there is no clear reason
+why scores differ for different folds? Let identify several common reasons for
+this and see what we can do about it. The first hypotheses we should consider
+and that we have too little data. For example, consider a case when we have
+a lot of patterns and trends in the data. But we do not have enough samples
+to generalize these patterns well. In that case, a model will utilize
+only some general patterns. And for each train validation split,
+these patterns will partially differ. This indeed, will lead to
+a difference in scores of the model. Furthermore, validation samples
+will be different each time only increasing the dispersion of scores for
+different folds. The second type of this,
+is data is too diverse and inconsistent. For example, if you have very similar
+samples with different target variance, a model can confuse them. Consider two cases, first, if one of such examples is in the train
+while another is in the validation. We can get a pretty high error for
+the second sample. And the second case,
+if both samples are in validation, we will get smaller errors for them. Or let's remember another
+example of diverse data we have already discussed a bit earlier. I'm talking about the example of
+predicting sales for January and February. Here we have the nature or the reason for
+the differences in scores. As a quick note, notice that in this
+example, we can reduce this diversity a bit if we will validate on
+the February from the previous year. So the main reasons for a difference in
+scores and optimal model parameters for different folds are, first,
+having too little data, and second, having too diverse and
+inconsistent data. Now let's outline our actions here. If we are facing this kind of problem, it can be useful to make
+more thorough validation. You can increase K in KFold,
+but usually 5 folds are enough. Make KFold validation several times
+with different random splits. And average scores to get a more
+stable estimate of model's quality. The same way we can choose
+the best parameters for the model if there is a chance to overfit. It is useful to use one set of KFold
+splits to select parameters and another set of KFold splits
+to check model's quality. Examples of competitions which
+required extensive validation include the Liberty Mutual Group Property
+Inspection Prediction competition and the Santander Customer Satisfaction
+competition. In both of them, scores of the competitors
+were very close to each other. And thus participants tried to
+squeeze more from the data. But do not overfit, so
+the thorough validation was crucial. Now, having discussed
+validation stage problems, let's move on to
+submission stage problems. Sometimes you can diagnose these problems
+in the process of doing careful. But still,
+often you encounter these type of problems only when you submit your
+solution to the platform. But then again, is your friend when it comes down
+to finding the root of the problem. Generally speaking,
+there are two cases of these issues. In the first case, leaderboard
+score is consistently higher or lower than validation score. In the second, leaderboard score is not
+correlated with validation score at all. So in the worst case, we can improve
+our score on the validation. While, on the contrary,
+score on the leaderboard will decrease. As you can imagine,
+these problems can be much more trouble. Now remember that the main rule
+of making a reliable validation, is to mimic a train tests
+pre made by organizers. I won't lie to you,
+it can be quite hard to identify and mimic the exact train tests here. Because of that, I highly you to
+start submitting your solutions right after you enter the competition. It's good to start exploring other
+possible roots of this problem. Let's first sort out causes we could
+observe during validation stage. Recall, we already have different
+model scores on different folds during validation. Here it is useful to see a leaderboard
+as another validation fold. Then, if we already have
+different scores in KFold, getting a not very similar result on
+the leaderboard is not suprising. More we can calculate mean and standard
+deviation of the validation scores and estimate if the leaderboard
+score is expected. But if this is not the case,
+then something is definitely wrong. There could be two more reasons for
+this problem. The first reason, we have too
+little data in public leaderboard, which is pretty self explanatory. Just trust your validation,
+and everything will be fine. And the second train and test data
+are from different distributions. Let me explain what I mean when I
+talk about different distributions. Consider a regression test of
+predicting people's height by their photos on Instagram. The blue line represents
+the distribution of heights for man, while the red line represents
+the distribution of heights for women. As you can see,
+these distributions are different. Now let's consider that the train
+data consists only of women, while the test data consists only of men. Then all model predictions will be
+around the average height for women. And the distribution of these predictions
+will be very similar to that for the train data. No wonder that our model will have
+a terrible score on the test data. Now, because our course is a practical
+one, let's take a moment and think what you can do if you
+encounter these in a competition. Okay, let's start with a general
+approach to such problems. At the broadest level, we need to find a way to tackle different
+distributions in train and test. Sometimes, these kind of problems
+could be solved by adjusting your solution during the training procedure. But sometimes, this problem can be solved only by adjusting your solution
+through the leaderboard. That is through leaderboard probing. The simplest way to solve this particular
+situation in a competition is to try to figure out the optimal constant
+prediction for train and test data. And shift your predictions
+by the difference. Right here we can calculate the average
+height of women from the train data. Calculating the average height
+of men is a big trickier. If the competition's metric
+is means squared error, we can send two constant submissions,
+write down the simple formula. And find out that the average target
+value for the test is equal to 70 inches. In general, this technique is
+known as leaderboard probing. And we will discuss it in the topic about. So now we know the difference between the
+average target values for the train and the test data, which is equal to 7 inches. And as the third step of adjusting
+our submission to the leaderboard we could just try to add
+7 to all predictions. But from this point it is not validational
+it is a leaderboard probing and list. Yes we probably could discover this
+during exploratory data analysis and try to make a correction
+in our validation scheme. But sometimes it is not possible
+without leaderboard probing, just like in this example. A competition which has something similar
+is the Quora question pairs competition. There, distributions of the target
+from train and test were different. So one could get a good
+improvement of a score adjusting his predictions
+to the leaderboard. But fortunately, this case is rare enough. More often, we encounter situations
+which are more like the following case. Consider that now train
+consists not only of women, but mostly of women, and test, vice versa. Consists not only of men,
+but mostly of men. The main strategy to deal with
+these kind of situations is simple. Again, remember to mimic
+the train test split. If the test consists mostly of Men, force the validation to
+have the same distribution. In that case, you ensure that
+your validation will be fair. This is true for getting raw scores and
+optimal parameters correctly. For example,
+we could have quite different scores and optimal parameters for women's and
+men's parts of the data set. Ensuring the same distribution in test and
+validation helps us get scores and parameters relevant to test. I want to mention two
+examples of this here. First the Data Science Game Qualification
+Phase: Music recommendation challenge. And second, competition with CTR prediction which we discussed
+earlier in the data topic. Let's start with the second one, do you remember the problem,
+we have a test of predicting CTR. So, the train data, which basically
+was the history of displayed ads obviously didn't contain
+ads which were not shown. On the contrary, the test data
+consisted of every possible ad. Notice this is the exact case of different
+distributions in train and test. And again, we need to set up our
+validation to mimic test here. So we have this huge bias towards
+showing that in the train and to set up a correct validation. We had to complete the validation
+set with rows of not shown ads. Now, let's go back to the first example. In that competition,
+participants had to predict whether a user will listen to
+a song recommended by assistant. So, the test contained
+only recommended songs. But train, on the contrary,
+contained both recommended songs and songs users selected themselves. So again, one could adjust his validation
+by 50 renowned songs selected by users. And again, if we will not account for
+that fact, then improving our model on actually selected songs can result
+in the validation score going up. But it doesn't have to result and
+the same improvements for the leaderboard. Okay let's conclude this overview
+of handling validation problems for the submission stage. If you have too little data in public
+leaderboard, just trust your validation. If that's not the case,
+make sure that you did not overfit. Then check if you made
+correct train/test split, as we discussed in the previous video. And finally, check if you have different
+distributions in train and test. Great, let's move on to
+the next point of this video. For now,
+I hope you did everything all right. First, you did extensive validation. Second, you choose a correct splitter
+strategy for train validation split. And finally, you ensured the same
+distributions in validation and testing. But sometimes you have to expect
+leaderboard shuffle anyway, and not just for you, but for everyone. First, for those who've never heard of it,
+a leaderboard shuffle happens when participants position some public and
+private leaderboard drastically different. Take a look at this screenshot from
+the two sigma financial model in challenge competition. The green and
+the red arrows mean how far a team moved. For example, the participant who
+finished the 3rd on the private leaderboard was the 392nd
+on the public leaderboard. Let's discuss three main reasons for
+that shuffle, randomness, too little data, and different public,
+private distributions. So first, randomness, this is the case when all participants
+have very similar scores. This can be either a very good score or
+a very poor one. But the main point here is
+that the main reason for differences in scores is randomness. To understand this a bit more,
+let's go through two quick examples here. The first one is the Liberty Mutual Group, Property Inspection Prediction
+competition. In that competition,
+scores of competitors were very close. And though randomness didn't play
+a major role in that competition, still many people overfit
+on the public leaderboard. The second example,
+which is opposite to the first is the TWO SIGMA Financial Model and
+Challenge competition. Because the financial data in that
+competition was highly unpredictable, randomness played a major role in it. So one could say that the leaderboard
+shuffle there was among the biggest shuffles on KFold platform. Okay, that was randomness, the second
+reason to expect leaderboard shuffle is too little data overall, and
+in private test set especially. An example of this is the Restaurant
+Revenue Prediction Competition. In that competition, trained set
+consisted of less than 200 gross. And this set consisted
+of less than 400 gross. So as you can see shuffle
+here was more than expected. Last reason of leaderboard
+shuffle could be different distributions between public and
+private test sets. This is usually the case
+with time series prediction, like the Rossmann Stores Sales
+competition. When we have a time based split,
+we usually have first few weeks in public leaderboard, and
+next few weeks in private leaderboards. As people tend to adjust their
+submission to public leaderboard and overfit, we can expect worse
+results on private leaderboard. Here again, trust your validation and
+everything will be fine. Okay, let's go over reasons for
+leaderboard shuffling. Now let's conclude both this video and
+the entire validation topic. Let's start with the video. First, if you have big dispersion
+of scores on validation stage we should do extensive validation. That means every score from
+different KFold splits, and team model on one split while
+evaluating score on the other. Second, if submission do not
+match local validation score, we should first, check if we have too
+little data in public leaderboard. Second, check if we did not overfit, check
+if you chose correct splitting strategy. And finally, check if trained test
+have different distributions. You can expect leaderboard shuffle
+because of three key things, randomness, little amount of data, and different
+public/private test distributions. So that's it,
+in this topic we defined validation and its connection to overfitting. Described common validation strategies. Demonstrated major data
+splitting strategies. And finally analyzed and learned how
+to tackle main validation problems. Remember this, and it will absolutely
+help you out in competitions. Make sure you understand
+the main idea of validation well. That is,
+you need to mimic the trained test split. [MUSIC]

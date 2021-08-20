@@ -1,0 +1,87 @@
+[SOUND] In the previous video,
+we started to discuss regression metrics. In this video,
+we'll talk about three more metrics, (R)MSPE, MAPE, and (R)MSLE. Think about the following problem. We need to predict,
+how many laptops two shops will sell? And in the train set for
+a particular date, we see that the first shop sold 10 items, and
+the second sold 1,000 items. Now suppose our model predicts
+9 items instead of 10 for the first shop, and
+999 instead of 1,000 for the second. It could happen that off by
+one error in the first case, is much more critical
+than in the second case. But MSE and MAE are equal to one for
+both shops predictions, and thus according to those metrics, these
+off by one errors are indistinguishable. This is basically because MSE and
+MAE work with absolute errors while relative error can
+be more important for us. Off by one error for
+the shops that sell ten items is equal to mistaking by 100 items for
+shops that sell 1,000 items. On the plot for MSE and MAE, we can see that all the error curves have
+the same shape for every target value. The curves are kind of shifted
+version of each other. That is an indicator that metric
+works with absolute errors. The relative error preference
+can be expressed with Mean Square Percentage Error, MSPE in short, or
+Mean Absolute Percentage Error, MAPE. If you compare them to MSE and MAE,
+you will notice the difference. For each object, the absolute error
+is divided by the target value, giving relative error. MSPE and MAPE can also be thought
+as weighted versions of MSE and MAE, respectively. For the MAPE, the weight of its sample is
+inversely proportional to it's target. While for MSPE, it is inversely
+proportional to a target square. Know that the weight do
+not sum up to one here. You can take a look at this
+individual error plus for our individual sample dataset. Now, we see the course became more
+flat as the target value increases. It means that, the cost we pay for
+a fixed absolute error, depends on the target value. And as the target increases, we pay less. So having talk about definition and
+motivation behind MSPE and MAPE. Let's now think, what are the optimal
+constant predictions for these matrix? Recall that for MSE, the optimal
+constant is the mean over target values. Now, for MSPE, the weighted
+version of MSE, in turns out that the optimal constant is weighted
+mean of the target values. For our dataset,
+the optimal value is about 6.6, and we see that it's biased
+towards small targets. Since the absolute error for
+them is weighted with the highest weight, and thus inputs metric the most. Now the MAPE, this is a question for you. What do you think is
+an optimal constant for it? Just use your intuition here and
+knowledge from the previous slides. Especially recall that MAPE
+is weighted version of MAE. The right answer is,
+the best constant is weighted median. It is not a very commonly used
+quantity actually, so take a look for a bit of explanation in
+the reading materials. The optimal value here is 6, and it is
+even smaller than the constant for MSPE. But do not try to explain
+it using outliers. If an outlier had a very,
+very small value, MAPE would be very biased towards it, since this
+outlier will have the highest weight. All right, now let's move on to
+the last metric in this video, Root Mean Square Logarithmic Error,
+or RMSLE in short. What is RMSLE? It is just an RMSE calculated
+in logarithmic scale. In fact, to calculate it,
+we take a logarithm of our predictions and the target values, and
+compute RMSE between them. The targets are usually non-negative but
+can equal to 0, and the logarithm of 0 is not defined. That is why a constant is usually
+added to the predictions and the targets before applying
+the logarithmic operation. This constant can also be
+chosen to be different to one. It can be for example 300
+depending on organizer's needs. But for us, it will not change much. So, this metric is usually used
+in the same situation as MSPE and MAPE, as it also carries about relative
+errors more than about absolute ones. But note the asymmetry
+of the error curves. From the perspective of RMSLE, it is always better to predict more
+than the same amount less than target. Same as root mean square error doesn't
+differ much from mean square error, RMSLE can be calculated
+without root operation. But the rooted version
+is more widely used. It is important to know that the plot
+we see here on the slide is built for a version without the root. And for a root version,
+an analogous plot would be misleading. Now let's move on to the question
+about the best constant. I will let you guess the answer again. Just recall that, Just recall what
+is the best constant prediction for RMSE and
+use the connection between RMSLE and RMSE. To find the constant, we should realize
+that we can first find the best constant for RMSE in the log space, will
+be the weighted mean in the log space. And after it, we need to get back from log space to
+the usual one with an inverse transform. The optimal constant turns out to be 9.1. It is higher than constants for
+both MAPE and MSPE. Here we see the optimal constants for
+the metrics we've broken down. MSE is quite biased towards
+the huge value from our dataset, while MAE is much less biased. MSPE and MAPE are biased
+towards smaller targets because they assign higher weight to
+the object with small targets. And RMSLE is frequently considered
+as better metrics than MAPE, since it is less biased towards small
+targets, yet works with relative errors. I strongly encourage you to
+think about the baseline for metrics that you can face for first time. It truly helps to build an intuition and
+to find a way to optimize the metrics. So, in this video, we will discuss different metrics
+that works with relative errors. MSPE, means square percentage error,
+MAPE, mean absolute percentage error, and RMSLE,
+root mean squared logarithmic error. We'll discussed the definitions and
+the baseline solutions for them. In the next video, we will study
+several classification matrix. [MUSIC]

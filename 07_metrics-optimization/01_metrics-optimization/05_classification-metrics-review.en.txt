@@ -1,0 +1,208 @@
+[MUSIC] In the previous videos, we discussed
+metrics for regression problems. And here,
+we'll review classification metrics. We will first talk about accuracy,
+logarithmic loss, and then get to area under a receiver
+operating curve, and Cohen's Kappa. And specifically Quadratic weighted Kappa. Let's start by fixing the notation. N will be the number of objects in our
+dataset, L, the number of classes. As before, y will stand for the target,
+and y hat, for predictions. If you see an expression in square
+brackets, that is an indicator function. It fields one if the expression
+is true and zero if it's false. Throughout the video,
+we'll use two more terms hard labels or hard predictions, and
+soft labels or soft predictions. Usually models output some kind of scores. For example, probabilities for
+an objects to belong to each class. The scores can be written
+as a vector of size L, and I will refer to this vector
+as to soft predictions. Now in classification we are usually
+asked to predict a label for the object, do a hard prediction. To do it, we usually find a maximum
+value in the soft predictions, and set class that corresponds to this
+maximum score as our predicted label. So hard label is
+a function of soft labels, it's usually arg max for
+multi class tasks, but for binary classification it can be
+thought of as a thresholding function. So we output label 1
+when the soft score for the class 1 is higher than the threshold,
+and we output class 0 otherwise. Let's start our journey
+with the accuracy score. Accuracy is the most straightforward
+measure of classifiers quality. It's a value between 0 and 1. The higher, the better. And it is equal to the fraction
+of correctly classified objects. To compute accuracy,
+we need hard predictions. We need to assign each
+object a specific table. Now, what is the best constant
+to predict in case of accuracy? Actually, there are a small
+number of constants to try. We can only assign a class label
+to all the objects at once. So what class should we assign? Obviously, the most frequent one. Then the number of correctly guessed
+objects will be the highest. But exactly because of that reason, there is a caveat in interpreting
+the values of the accuracy score. Take a look at this example. Say we have 10 cats and
+90 dogs in our train set. If we always predicted dog for
+every object, then the accuracy would be already 0.9. And imagine you tell someone that your
+classifier is correct 9 times out of 10. The person would probably
+think you have a nice model. But in fact, your model just predicts
+dog class no matter what input is. So the problem is, that the base
+line accuracy can be very high for a data set, even 99%, and that makes
+it hard to interpret the results. Although accuracy score is very clean and
+intuitive, it turns out to be quite hard to optimize. Accuracy also doesn't care how confident
+the classifier is in the predictions, and what soft predictions are. It cares only about arg
+max of soft predictions. And thus, people sometimes prefer to
+use different metrics that are first, easier to optimize. And second, these metrics work with
+soft predictions, not hard ones. One of such metrics is logarithmic loss. It tries to make the classifier to
+output two posterior probabilities for their objects to be of a certain kind,
+of a certain class. A log loss is usually the reason
+a little bit differently for binary and multi class tasks. For binary, it is assumed that y
+hat is a number from 01 range, and it is a probability of
+an object to belong to class one. So 1 minus y hat is the probability for
+this object to be of class 0. For multiclass tasks,
+LogLoss is written in this form. Here y hat ith is a vector of size L,
+and its sum is exactly 1. The elements are the probabilities
+to belong to each of the classes. Try to write this formula down for
+L equals 2, and you will see it is exactly
+binary loss from above. And finally, it should be mentioned
+that to avoid in practice, predictions are clipped to
+be not from 0 to 1, but from some small positive number to
+1 minus some small positive number. Okay, now let us analyze it a little bit. Assume a target for an object is 0,
+and here on the plot, we see how the error will change if we
+change our predictions from 0 to 1. For comparison, we'll plot
+absolute error with another color. Logloss usually penalizes
+completely wrong answers and prefers to make a lot of small
+mistakes to one but severer mistake. Now, what is the best constant for
+logarithmic loss? It turns out that you need to set
+predictions to the frequencies of each class in the data set. In our case, the frequencies for the cat class is 0.1, and
+it is 0.9 for class dog. Then the best constant is
+vector of those two values. How do I, well how do I know that is so? To prove it we should take a derivative
+with the respect to constant alpha, set it to 0, and
+find alpha from this equation. Okay, we've discussed accuracy and
+log loss, now let's move on. Take a look at the example. We show ground truth target
+value with color, and the position of the point
+shows the classifier score. Recall that to compute accuracy score for
+a binary task, we usually take soft predictions
+from our model and apply threshold. We can see the prediction to be green
+if the score is higher than 0.5 and red if it's lower. For this example the accuracy is 6 or
+7, as we misclassified one red object. But look, if the threshold was 0.7, then all the objects would
+be classified correctly. So this is kind of motivation for
+our next metric, Area Under Curve. We shouldn't fix the threshold for it, but this metric kind of tries all possible
+ones and aggregates those scores. So this metric doesn't really cares about
+absolute values of the predictions. But it depends only on
+the order of the objects. Actually, there are several ways AUC, or
+this area under curve, can be explained. The first one explains under what
+curve we should compute area. And the second explains
+AUC as the probability of object pairs to be correctly
+ordered by our model. We will see both
+explanations in the moment. So let's start with the first one. So we need to calculate
+an area under a curve. What curve? Let's construct it right now. Once again, say we have six objects, and
+their true label is shown with a color. And the position of the dot shows
+the classifier's predictions. And for now we will use word positive
+as synonym to belongs to the red class. So positive side is on the left. What we will do now, we'll go from left to
+right, jump from one object to another. And for
+each we will calculate how many red and green dots are there to the left,
+to this object that we stand on. The red dots we'll have a name for
+them, true positives. And for the green ones we'll
+have name false positives. So we will kind of compute
+how many true positives and false positives we see to the left
+of the object we stand on. Actually it's very simple,
+we start from bottom left corner and go up every time we see red point. And right when we see a green one. Let's see. So we stand on the leftmost point first. And it is red, or positive. So we increase the number of
+true positives and move up. Next, we jump on the green point. It is false positive, and so we go right. Then two times up for two red points. And finally two times right for
+the last green point. We finished in the top right corner. And it always works like that. We start from bottom left and end up in top right corner when
+we jump on the right most point. By the way, the curve we've just built
+is called Receiver Operating Curve or ROC Curve. And now we are ready to calculate
+an area under this curve. The area is seven and we need to normalize
+it by the total plural area of the square. So AUC is 7/9, cool. Now what AUC will be for
+the data set that can be separated with a threshold,
+like in our initial example? Actually AUC will be 1,
+maximum value of AUC. So it works. It doesn't need a threshold
+to be specified and it doesn't depend on absolute values. Recall that we've never used absolute
+values while constructing the curve. Now in practice,
+if you build such curve for a huge data set in real classifier,
+you would observe a picture like that. Here curves for different classifiers
+are shown with different colors. The curves usually lie above
+the dashed line which shows how would the curve look like if
+we made predictions at random. So it kind of shows us a baseline. And note that the area under
+the dashed line is 0.5. All right, we've seen that we can build
+a curve and compute area under it. There is another total different
+explanation for the AUC. Consider all pairs of objects, such that one object is from red class and
+another one is from green. AUC is a probability that score for the green one will be higher
+than the score for the red one. In other words, AUC is a fraction
+of correctly ordered pairs. You see in our example we have
+two incorrectly ordered pairs and nine pairs in total. And then there are 7 correctly
+ordered pairs and thus AUC is 7/9. Exactly as we got before,
+while computing area under the curve. All right,
+we've discussed how to compute AUC. Now let's think what is the best
+constant prediction for it. In fact, AUC doesn't depend on
+the exact values of the predictions. So all constants will lead
+to the same score and this score will be around 0.5,
+the baseline. This is actually something
+that people love about AUC. It is clear what the baseline is. Of course there are flaws in AUC,
+every metric has some. But still AUC is metric I usually use
+when no one sets up another one for me. All right, finally let's get
+to the last metric to discuss, Cohen's Kappa and it's derivatives. Recall that if we always predict
+the label of the most frequent class, we can already get pretty high accuracy
+score, and that can be misleading. Actually in our example
+all the models will fit, will have a score somewhere
+between 0.9 and 1. So we can introduce a new metric such that
+for an accuracy of 1 it would give us 1, and for
+the baseline accuracy it would output 0. And of course,
+baselines are going to be different for every data,
+not necessarily 0.9 or whatever. It is also very similar to
+what r squared does with MSE. It informally saying is
+kind of normalizes it. So we do the same here. And this is actually already
+almost Cohen's Kappa. In Cohen's Kappa we take
+another value as the baseline. We take the higher predictions for
+the data set and shuffle them, like randomly permute. And then we calculate an accuracy for
+these shuffled predictions. And that will be our baseline. Well to be precise, we permute and
+calculate accuracies many times and take, as the baseline, an average for
+those computed accuracies. In practice, of course,
+we do not need to do any permutations. This baseline score can
+be computed analytically. We need, first, to multiply the empirical
+frequencies of our predictions and grant those labels for
+each class, and then sum them up. For example,
+if we assign 20 cat labels and 80 dog labels at random,
+then the baseline accuracy will be 0.2*0.1 + 0.8*0.9 = 0.74. You can find more examples in actually. Here I wanted to explain a nice way of
+thinking about eliminator as a baseline. We can also recall that error
+is equal to 1 minus accuracy. We could rewrite the formula as 1
+minus model's error/baseline error. It will still be Cohen's Kappa, but now, it would be easier to
+derive weighted Cohen's Kappa. To explain weighted Kappa,
+we first need to do a step aside, and introduce weighted error. See now we have cats,
+dogs and tigers to classify. And we are more or less okay if
+we predict dog instead of cat. But it's undesirable to predict cat or
+dog if it's really a tiger. So we're going to form
+a weight matrix where each cell contains The weight for
+the mistake we might do. In our case, we set error weight to be
+ten times larger if we predict cat or dog, but the ground truth label is tiger. So with error weight matrix, we can express our preference on
+the errors that the classifier would make. Now, to calculate weight and error we need another matrix, confusion
+matrix, for the classifier's prediction. This matrix shows how our classifier
+distributes the predictions over the objects. For example, the first column indicates
+that four cats out of ten were recognized correctly, two were classified as dogs and
+four as tigers. So to get a weighted error score, we need to multiply these two matrices
+element-wise and sum their results. This formula needs a proper normalization to make sure the quantity is between 0 and
+1, but it doesn't matter for our purposes, as the normalization
+constant will anyway cancel. And finally,
+weighted kappa is calculated as 1- weighted error / weighted baseline error. In many cases, the weight matrices
+are defined in a very simple way. For example, for classification
+problems with ordered labels. Say you need to assign each
+object a value from 1 to 3. It can be, for instance,
+a rating of how severe the disease is. And it is not regression, since you do not
+allow to output values to be somewhere between the ratings and the ground truth
+values also look more like labels, not as numeric values to predict. So such problems are usually treated
+as classification problems, but weight matrix is introduced to account for
+order of the labels. For example, weights can be linear, if we
+predict two instead of one, we pay one. If we predict three instead of of one,
+we pay two. Or the weights can be quadratic,
+if we'll predict two instead of one, we still pay one, but if we predict
+three instead of one, we now pay for. Depending on what weight matrix is used, we get either linear weighted kappa or
+quadratic weighted kappa. The quadratic weighted kappa has been
+used in several competitions on Kaggle. It is usually explained as
+inter-rater agreement coefficient, how much the predictions of the model
+agree with ground-truth raters. Which is quite intuitive for
+medicine applications, how much the model agrees
+with professional doctors. Finally, in this video,
+we've discussed classification matrix. The accuracy, it is an essential
+metric for classification. But a simple model that predicts always
+the same value can possibly have a very high accuracy that makes
+it hard to interpret this metric. The score also depends on the threshold
+we choose to convert soft predictions to hard labels. Logloss is another metric, as opposed to accuracy it depends on soft
+predictions rather than on hard labels. And it forces the model to predict
+probabilities of an object to belong to each class. AUC, area under receiver operating curve,
+doesn't depend on the absolute values predicted by the classifier, but
+only considers the ordering of the object. It also implicitly tries all the
+thresholds to converge soft predictions to hard labels, and thus removes the
+dependence of the score on the threshold. Finally, Cohen's Kappa fixes the baseline
+for accuracy score to be zero. In spirit it is very
+similar to how R-squared beta scales MSE value
+to be easier explained. If instead of accuracy we used weighted
+accuracy, we would get weighted kappa. Weighted kappa with quadratic weights
+is called quadratic weighted kappa and commonly used on Kaggle. [MUSIC]

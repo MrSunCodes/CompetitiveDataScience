@@ -1,0 +1,75 @@
+[SOUND] In the previous video,
+we understood that validation helps us select a model which will
+perform best on the unseen test data. But, to use validation, we first need
+to split the data with given labels, entrain, and validation parts. In this video, we will discuss
+different validation strategies. And answer the questions. How many splits should we make and what are the most often methods
+to perform such splits. Loosely speaking, the main difference
+between these validation strategies is the number of splits being done. Here I will discuss three of them. First is holdout, second is K-fold,
+and third is leave-one-out. Let's start with holdout. It's a simple data split which
+divides data into two parts, training data frame, and
+validation data frame. And the important note here
+is that in any method, holdout included, one sample can go
+either to train or to validation. So the samples between train and
+the validation do not overlap, if they do,
+we just can't trust our validation. This is sometimes the case,
+when we have repeated samples in the data. And if we are,
+we will get better predictions for these samples and
+more optimistic all estimation overall. It is easy to see that these can prevent
+us from selecting best parameters for our model. For example,
+over fitting is generally bad. But if we have duplicated samples
+that present, and train, and test simultaneously and over feed,
+validation scores can deceive us into a belief that maybe we are moving
+in the right direction. Okay, that was the quick note about
+why samples between train and validation must not overlap. Back to holdout. Here we fit our model on
+the training data frame, and evaluate its quality on
+the validation data frame. Using scores from this evaluation,
+we select the best model. When we are ready to make a submission, we can retrain our model on
+our data with given labels. Thinking about using
+holdout in the competition. It is usually a good choice,
+when we have enough data. Or we are likely to get similar scores for the same model,
+if we try different splits. Great, since we understood
+what holdout is, let's move onto the second validation
+strategy, which is called K-fold. K-fold can be viewed as a repeated
+holdout, because we split our data into key parts and iterate through them, using
+every part as a validation set only once. After this procedure,
+we average scores over these K-folds. Here it is important to understand
+the difference between K-fold and usual holdout or bits of K-times. While it is possible to average scores
+they receive after K different holdouts. In this case,
+some samples may never get invalidation, while others can be there multiple times. On the other side, the core idea of K-fold
+is that we want to use every sample for validation only once. This method is a good choice when we
+have a minimum amount of data, and we can get either a sufficiently
+big difference in quality, or different optimal
+parameters between folds. Great, having dealt with K-fold, we can move on to the third
+validation strategy in our release. It is called leave-one-out. And basically it is a special
+case of Kfold when K is equal to the number
+of samples in our data. This means that it will iterate
+through every sample in our data. Each time usion came in a slot minus
+one object is a train subset and one object left is a test subset. This method can be helpful if
+we have too little data and just enough model to entrain. So that there, validation strategies. Holdout, K-fold and leave-one-out. We usually use holdout or
+K-fold on shuffle data. By shuffling data we are trying to
+reproduce random trained validation split. But sometimes, especially if you
+do not have enough samples for some class, a random split can fail. Let's consider, for an example. We have binary classification tests and
+a small data set with eight samples. Four of class zero, and four of class one. Let's split data into four folds. Done, but notice, we are not always
+getting 0 and 1 in the same problem. If we'll use the second fold for
+validation, we'll get an average value of the target in the
+train of two third instead of one half. This can drastically change
+predictions of our model. What we need here to handle
+this problem is stratification. It is just the way to insure we'll get similar target
+distribution over different faults. If we split data into four
+faults with stratification, the average of each false target
+values will be equal to one half. It is easier to guess that significance
+of this problem is higher, first for small data sets, like in this example,
+second for unbalanced data sets. And for binary classification,
+that could be, if target average were very close to 0 or
+vice versa, very close to 1. And third, for multiclass classification
+tasks with huge amount of classes. For good classification data sets, stratification split will be quite
+similar to a simple shuffle split. That is, to a random split. Well done, in this video we have discussed
+different validation strategies and reasons to use each one of them. Let's summarize this all. If we have enough data, and
+we're likely to get similar scores and optimal model's parameters for
+different splits, we can go with Holdout. If on the contrary, scores and
+optimal parameters differ for different splits,
+we can choose KFold approach. And event, if we too little data,
+we can apply leave-one-out. The second big takeaway from this video
+for you should be stratification. It helps make validation more stable,
+and especially useful for small and unbalanced datasets. Great. In the next videos we will continue to
+comprehend validation at it's core. [SOUND] [MUSIC]

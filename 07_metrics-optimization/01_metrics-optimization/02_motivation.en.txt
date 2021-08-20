@@ -1,0 +1,88 @@
+[MUSIC] Hi, in this lesson, we will talk about
+a major part of any competition. The metrics that are used
+to evaluate a solution. In this video, we'll discuss why
+there are so many metrics and why it is necessary to know what
+metric is used in a competition. In the following videos, we will study what is the difference
+between a loss and a metric? And we'll overview and show optimization
+techniques for the most important and common metrics. In the course, we focus on regression and
+classification. So we only discuss metric for these tasks. For better understanding, we will also
+build a simple baseline for each metric. That is what the best constant to
+predict for that particular method. So metrics are an essential
+part of any competition. They are used to evaluate our submissions. Okay, but why do we have a different
+evolution metric on each competition? That is because there are plenty of ways
+to measure equality of an algorithm and each company decides for themselves what is the most appropriate
+way for their particular problem. For example, let's say an online shop is trying to
+maximize effectiveness of their website. The thing is you need to
+formalize what is effectiveness. You need to define a metric
+how effectiveness is measured. It can be a number of times
+a website was visited, or the number of times something
+was ordered using this website. So the company usually decides for
+itself what quantity is most important for it and
+then tries to optimize it. In the competitions, the metrics
+is fixed for us and the models and competitors are ranked using it. In order to get higher leader board score
+you need to get a better metric score. That's basically the only thing in the
+competition that we need to care about, how to get a better score. And so it is very important to
+understand how metric works and how to optimize it efficiently. I want to stress out that
+it is really important to optimize exactly the metric we're given in
+the competition and not any other metric. Consider an example, blue and red lines represent objects of
+a class zero and one respectively. And say we decided to use
+a linear classifier,and came up with two matrix to optimize, M1 and M2. The question is, how much different
+the resulting classifiers would be? Actually by a lot. The two lines here, the solid and the dashed one show the best line
+your boundaries for the two cases. For the dashed, M1 score is the highest
+among all possible hyperplanes. But M2 score for the hyperplane is low. And we have an opposite situation for
+the solid boundary. M2 score is the highest,
+whereas M1 score is low. Now, if we know that in this particular
+competition, the ranking is based on M1 score, then we need to optimize M1 score
+and so we should submit the prediction. Predictions of the model
+with dash boundary. Once again,
+if your model is scored with some metric, you get best results by
+optimizing exactly that metric. Now, the biggest problem is that some
+metrics cannot be optimized efficiently. That is there is no simple enough way
+to find, say, the optimal hyperplane. That is why sometimes we need to
+train our model to optimize something different than competition metric. But in this case we will need to
+apply various heuristics to improve competition metric score. And there's another case where we
+need to be smart about the metrics. It is one that train and
+the test sets are different. In the lesson about leaks,
+we'll discuss leader board probing. That is, we can check, for example, if the mean target value on public part
+of test set is the same as on train. If it's not, we would need to adapt our
+predictions to suit rest set better. This is basically a specific metric
+optimization technique we apply, because train and test are different. Or there can be more severe cases
+where improved metric validation set could possibly not result into
+improved metric on the test set. In these situations,
+it's a good idea to stop and think maybe there is a different
+way to approach the problem. In particular, time series can
+be very challenging to forecast. Even if you did a validation just right. [INAUDIBLE] by time, rolling windows,
+fill the distribution in the future can be much different
+from what we had in the train set. Or sometimes,
+there's just not enough training data, so a model cannot capture the patterns. In one of the compositions I took part, I had to use some tricks to boost
+my score after the modeling. And the trick was as a consequence
+of a particular metric used in that competition. The metric was quite unusual actually,
+but it is intuitive. If a trend is guessed correctly, then the
+absolute difference between the prediction and the target is considered as an error. If for instance, model predict end
+value in the prediction horizon to be higher than the last value from the train
+side but in reality it is lower, then the trend is predicted incorrectly,
+and the error was set to
+absolute difference squared. So if we predict a value to be
+above the dashline, but it turns out to be below or vice versa, the trend
+[INAUDIBLE] to be predicted incorrectly. So this metric carries a lot more about correct trend to be predicted than
+about actual value you predict. And that is something it
+was possible to exploit. There were several times
+series was to forecast, the horizon to predict was wrong, and
+the model's predictions were unreliable. Moreover, it was not possible
+to optimize this metric exactly. So I realized that it would be much better
+to set all the predictions to either last value plus a very tiny constant,
+or last value minus very tiny constant. The same value for all the points in
+the time interval, we are to predict for each time series. And design depends on the estimation. What is more likely the values
+in the horizon to be lower than the last known value,
+or to be higher? This trick actually took me to
+the first place in that competition. So finding a nice way to optimize
+a metric can give you an advantage over other participants,
+especially if the metric is peculiar. So maybe I should formulate it like that. We should not forget to do kind of
+exploratory metric analysis along with exploratory data analysis. At least when the metric
+is an unusual one. So in this video we've understood
+that each business has its own way to measure ineffectiveness
+of an algorithm based on its needs, and therefore, there are so
+many different metrics. And we saw two motivational examples. Why should we care about the metrics? Well, basically because it is how
+competitors are compared to each other. In the following videos we'll
+talk about concrete metrics. We'll first discuss high level
+intuition for each metric and then talk about optimization techniques. [MUSIC]
