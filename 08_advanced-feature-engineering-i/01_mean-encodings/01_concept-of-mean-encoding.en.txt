@@ -1,0 +1,80 @@
+[MUSIC] Hi, everyone. In this section, we'll cover a very
+powerful technique, mean encoding. It actually has a number of names. Some call it likelihood encoding,
+some target encoding, but in this course,
+we'll stick with plain mean encoding. The general idea of this
+technique is to add new variables based on some
+feature to get where we started,. In simplest case, we encode each
+level of categorical variable with corresponding target mean. Let's take a look at
+the following example. Here, we have some binary
+classification task in which we have a categorical variable, some city. And of course,
+we want to numerically encode it. The most obvious way and
+what people usually use is label encoding. It's what we have in second column. Mean encoding is done differently, via encoding every city with
+corresponding mean target. For example, for Moscow, we have
+five rows with three 0s and two 1s. So we encode it with 2 divided by 5 or
+0.4. Similarly, we deal with the rest
+of cities, pretty straightforward. What I've described here
+is a very high level idea. There are a huge number of pitfalls one
+should overcome in actual competition. We went deep into details for
+now, just keep it in mind. At first, let me explain. Why does it even work? Imagine, that our dataset is much bigger
+and contains hundreds of different cities. Well, let's try to compare,
+of course, very abstractly, mean encoding with label encoding. We plot future histograms for
+class 0 and class 1. In case of label encoding,
+we'll always get total and random picture because
+there's no logical order, but when we use mean target to encode the
+feature, classes look way more separable. The plot looks kind of sorted. It turns out that this sorting quality
+of mean encoding is quite helpful. Remember, what is the most popular and effective way to solve
+machine learning problem? Is grading using trees, [INAUDIBLE] OIGBM. One of the few downsides is
+an inability to handle high cardinality categorical variables. Trees have limited depth,
+with mean encoding, we can compensate it, we can reach better loss
+with shorter trees. Cross validation loss
+might even look like this. In general, the more complicated and
+non linear feature target dependency, the more effective is mean encoding, okay. Further in this section, you will
+learn how to construct mean encodings. There are actually a lot of ways. Also keep in mind that we use
+classification tests only as an example. We can use mathematics
+on other tests as well. The main idea remains the same. Despite the simplicity of the idea, you
+need to be very careful with validation. It's got to be impeccable. It's probably the most important part. Understanding the correct linkless
+validation is also a basis for staking. The last, but not least, are extensions. There are countless possibilities to
+derive new features from target variable. Sometimes, they produce significant
+improvement for your models. Let's start with some
+characteristics of data sets, that indicate the usefulness
+of main encoding. The presence of categorical
+variables with a lot of levels is already a good indicator, but
+we need to go a little deeper. Let's take a look at each of these
+learning logs from Springleaf competition. I ran three models with different depths,
+7, 9, and 11. Train logs are on the top plot. Validation logs are on the bottom one. As you can see, with increasing the depths
+of trees, our training care becomes better and better, nearly perfect and
+that's a normal part. But we don't actually over feed and
+that's weird. Our validation score also increase,
+it's a sign that trees need a huge number of splits to
+extract information from some variables. And we can check it for mortal dump. It turns out that some features have
+a tremendous amount of split points, like 1200 or 1600 and that's a lot. Our model tries to treat all
+those categories differently and they are also very important for
+predicting the target. We can help our model via mean encodings. There is a number of ways
+to calculate encodings. The first one is the one
+we've been discussing so far. Simply taking mean of target variable. Another popular option is to take
+initial logarithm of this value, it's called weight of evidence. Or you can calculate all
+of the numbers of ones. Or the difference between number
+of ones and the number of zeros. All of these are variable options. Now, let's actually
+construct the features. We will do it on sprinkled data set, suppose we've already separated
+the data for train and validation, X_tr and X val data frames. These called snippet shows how
+to construct mean encoding for an arbitrary column and map it into
+a new data frame, train new and val new. We simply do group by on that column and
+use target as a map. Resulting commands were able [INAUDIBLE]. It is then mapped to tree and
+validation data sets by a map operator. After we've repeated this process for
+every call, we can fit each of those
+model on this new data. But something's definitely not right, after several efforts training AOC
+is nearly 1, while on validation, the score set rates around 0.55,
+which is practically noise. It's a clear sign of terrible overfitting. I'll explain what happened
+in a few moments. Right now, I want to point out that
+at least we validated correctly. We separated train and validation, and used all the train
+data to estimate mean encodings. If, for instance, we would have
+estimated mean encodings before train validation split, then we would
+not notice such an overfitting. Now, let's figure out
+the reason of overfitting. When they are categorized, it's pretty
+common to get results like in an example, target 0 in train and
+target 1 in validation. Mean encodings turns into a perfect
+feature for such categories. That's why we immediately get
+very good scores on train and fail hardly on validation. So far, we've grasped the concept of mean
+encodings and walked through some trivial examples, that obviously can not use
+mean encodings like this in practice. We need to deal with overfitting first,
+we need some kind of regularization. And I will tell you about different methods in the next video. [MUSIC]

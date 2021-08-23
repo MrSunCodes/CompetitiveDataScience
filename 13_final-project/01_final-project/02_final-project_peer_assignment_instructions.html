@@ -1,0 +1,312 @@
+<meta charset="utf-8"/>
+<co-content>
+ <p>
+  Starting since the first week you have been working on the final project: the "1C" competition. Now it's time to wrap up all you have done and submit your predictions and your code.
+ </p>
+ <p>
+  This is a peer-reviewed project. While we will evaluate the quality of your predictions directly and provide you the score of your solution on the Private LB, we also believe that assessing the other people's code and receiving feedback for your solutions is a great way to learn.
+ </p>
+ <p>
+  We hope that the most dedicated of you very soon will win a real competition on Kaggle or other sites. Others may be involved in setting up and conducting your own competition on Kaggle Inclass or even on Kaggle's main page or, may be, on other competition platforms. Because of that, we want the submission of your solution to be in the format, required on Kaggle to claim the winning prize. Note, that your solution basically should be provided in two parts: the code and the documentation. Beside that, your code should reproduce your exact final submission file.
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    The guideline for the documentation and code:
+    <a href="https://www.kaggle.com/WinningModelDocumentationGuidelines" title="">
+     https://www.kaggle.com/WinningModelDocumentationGuidelines
+    </a>
+   </p>
+  </li>
+ </ul>
+ <p>
+  We want to slightly specify the above guideline for the code to better suit our needs:
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    You should do parts which require assessing intermediate results in a jupyter notebooks. This parts include EDA, investigation for data leaks, hyperparameter optimization.
+   </p>
+  </li>
+  <li>
+   <p>
+    You can do model training / prediction either in Jupyter notebook or in python source code files.
+   </p>
+  </li>
+ </ul>
+ <p>
+  Important moments
+ </p>
+ <p>
+  Follow this guidelines to simplify life for you and for the fellow learner. This is a must.
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    The solution runs without errors. Specify required libraries and their versions in the first notebook cell or in requirements.txt --
+    <a href="https://pip.readthedocs.io/en/1.1/requirements.html" title="">
+     https://pip.readthedocs.io/en/1.1/requirements.html
+    </a>
+    This will save a lot of time for other students, assessing your project.
+   </p>
+  </li>
+  <li>
+   <p>
+    Serialize the trained model to disk. This enables code to use the trained model to make predictions on the test data without re-training the model (which is typically much more time-intensive).
+   </p>
+  </li>
+ </ul>
+</co-content>
+<h3 level="3">
+ Step-By-Step Assignment Instructions
+</h3>
+<co-content>
+ <p>
+  This is a peer-reviewed project. Everyone who submits an assignment must review at least three other submissions to ensure everyone receives a grade; however, many learners complete more to help their peers who are still waiting.
+ </p>
+ <ol bullettype="numbers">
+  <li>
+   <p>
+    <u>
+     Submit your code
+    </u>
+    . It could be done on "My submission" tab. Upload your notebook or archive with code files. Keep it simple and provide an instruction about how to run the code and how to produce submission file. Reviewers should be able to run it smoothly and without errors, so please make your code clear. When you ready to submit your solution, click the "Submit" button.
+   </p>
+  </li>
+  <li>
+   <p>
+    <u>
+     Give feedback to your peers
+    </u>
+    . You are required to give feedback to at least 3 peers to complete this project. You can begin giving feedback to other students as soon as you submit. Click the tab to get started. Feel free to provide additional reviews beyond the 3 required!
+   </p>
+  </li>
+  <li>
+   <p>
+    <u>
+     Read feedback from your peers
+    </u>
+    . Your peers will also begin reviewing your project as soon as you submit. You will receive an email notification of each new review. Only you will be able to see the feedback you receive. If you find someone’s review helpful, click the "This review is helpful" button to thank the reviewer.
+   </p>
+  </li>
+  <li>
+   <p>
+    <u>
+     Browse other projects
+    </u>
+    . You can browse through all of the submitted projects, even if you don't plan to review each one. Click the like button if you think someone did a great job on their project.
+   </p>
+  </li>
+ </ol>
+</co-content>
+<h3 level="3">
+ Review criteria
+</h3>
+<co-content>
+ <p>
+  Before preparing to submit the assignment, pay attention to the following criterions. Try to complete most of them and present results in a form that can be easily assessed.
+ </p>
+ <p>
+  Clarity
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    The clear step-by-step instruction on how to produce the final submit file is provided
+   </p>
+  </li>
+  <li>
+   <p>
+    Code has comments where it is needed and meaningful function names
+   </p>
+  </li>
+ </ul>
+ <p>
+  Feature preprocessing and generation with respect to models
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    Several simple features are generated
+   </p>
+  </li>
+  <li>
+   <p>
+    For non-tree-based models preprocessing is used or the absence of it is explained
+   </p>
+  </li>
+ </ul>
+ <p>
+  Feature extraction from text and images
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    Features from text are extracted
+   </p>
+  </li>
+  <li>
+   <p>
+    Special preprocessings for text are utilized (TF-IDF, stemming, levenshtening...)
+   </p>
+  </li>
+ </ul>
+ <p>
+  EDA
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    Several interesting observations about data are discovered and explained
+   </p>
+  </li>
+  <li>
+   <p>
+    Target distribution is visualized, time trend is assessed
+   </p>
+  </li>
+ </ul>
+ <p>
+  Validation
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    Type of train/test split is identified and used for validation
+   </p>
+  </li>
+  <li>
+   <p>
+    Type of public/private split is identified
+   </p>
+  </li>
+ </ul>
+ <p>
+  Data leakages
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    Data is investigated for data leakages and investigation process is described
+   </p>
+  </li>
+  <li>
+   <p>
+    Found data leakages are utilized
+   </p>
+  </li>
+ </ul>
+ <p>
+  Metrics optimization
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    Correct metric is optimized
+   </p>
+  </li>
+ </ul>
+ <p>
+  Advanced Features I: mean encodings
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    Mean-encoding is applied
+   </p>
+  </li>
+  <li>
+   <p>
+    Mean-encoding is set up correctly, i.e. KFold or expanding scheme are utilized correctly
+   </p>
+  </li>
+ </ul>
+ <p>
+  Advanced Features II
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    At least one feature from this topic is introduced
+   </p>
+  </li>
+ </ul>
+ <p>
+  Hyperparameter tuning
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    Parameters of models are roughly optimal
+   </p>
+  </li>
+ </ul>
+ <p>
+  Ensembles
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    Ensembling is utilized (linear combination counts)
+   </p>
+  </li>
+  <li>
+   <p>
+    Validation with ensembling scheme is set up correctly, i.e. KFold or Holdout is utilized
+   </p>
+  </li>
+  <li>
+   <p>
+    Models from different classes are utilized (at least two from the following: KNN, linear models, RF, GBDT, NN)
+   </p>
+  </li>
+ </ul>
+</co-content>
+<style>
+ body {
+    padding: 50px 85px 50px 85px;
+}
+
+table th, table td {
+    border: 1px solid #e0e0e0;
+    padding: 5px 20px;
+    text-align: left;
+}
+input {
+    margin: 10px;
+}
+}
+th {
+    font-weight: bold;
+}
+td, th {
+    display: table-cell;
+    vertical-align: inherit;
+}
+img {
+    height: auto;
+    max-width: 100%;
+}
+pre {
+    display: block;
+    margin: 20px;
+    background: #424242;
+    color: #fff;
+    font-size: 13px;
+    white-space: pre-wrap;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    border: 1px solid #ccc;
+}
+</style>
+<script async="" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+</script>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$$','$$'], ['$','$'] ],
+      displayMath: [ ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>

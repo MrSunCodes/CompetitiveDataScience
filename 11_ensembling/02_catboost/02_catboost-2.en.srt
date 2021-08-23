@@ -1,0 +1,591 @@
+1
+00:00:03,060 --> 00:00:07,015
+Let's now discuss how CatBoost reduces overfitting.
+
+2
+00:00:07,015 --> 00:00:09,780
+CatBoost all standard gradient boosting implementations.
+
+3
+00:00:09,780 --> 00:00:11,790
+Because each nutrient to approximate
+
+4
+00:00:11,790 --> 00:00:14,500
+the gradients order Newton step of the current model.
+
+5
+00:00:14,500 --> 00:00:17,670
+The gradient value is estimated using all objects and leave,
+
+6
+00:00:17,670 --> 00:00:20,835
+and is calculated as the average gradient of these objects.
+
+7
+00:00:20,835 --> 00:00:22,860
+Thus, gradients are estimated using
+
+8
+00:00:22,860 --> 00:00:25,620
+the same data points to the current model was built on.
+
+9
+00:00:25,620 --> 00:00:29,915
+This leads to a bias in gradient estimates which leads to overfitting.
+
+10
+00:00:29,915 --> 00:00:31,545
+To overcome this problem,
+
+11
+00:00:31,545 --> 00:00:33,420
+CatBoost uses the same permutations that we
+
+12
+00:00:33,420 --> 00:00:35,630
+have used for categorical features statistics.
+
+13
+00:00:35,630 --> 00:00:38,700
+The lift values are calculated for each object separately
+
+14
+00:00:38,700 --> 00:00:41,980
+using only the objects before given one in the permutation.
+
+15
+00:00:41,980 --> 00:00:46,990
+These values are then used to score the split candidates or when building a new tree.
+
+16
+00:00:46,990 --> 00:00:49,790
+CatBoost has efficient CPU training implementation.
+
+17
+00:00:49,790 --> 00:00:51,890
+We did a lot of speed-ups after their release.
+
+18
+00:00:51,890 --> 00:00:55,940
+Currently, training on large datasets with many numerical features,
+
+19
+00:00:55,940 --> 00:00:58,430
+will be around four times faster than extra boost,
+
+20
+00:00:58,430 --> 00:01:00,710
+and will have similar speed as light GBM.
+
+21
+00:01:00,710 --> 00:01:03,440
+On small dataset, CatBoost will be around two times
+
+22
+00:01:03,440 --> 00:01:06,600
+faster than extra boost and two times slower than light GBM.
+
+23
+00:01:06,600 --> 00:01:09,085
+This comparison was done with dataset epson.
+
+24
+00:01:09,085 --> 00:01:12,170
+There might be cases on which this number will change for
+
+25
+00:01:12,170 --> 00:01:13,880
+example if there are less than 10 features
+
+26
+00:01:13,880 --> 00:01:15,970
+than the bottleneck of the algorithm is different.
+
+27
+00:01:15,970 --> 00:01:19,895
+It is also important to note that CatBoost doesn't have sparse data support yet.
+
+28
+00:01:19,895 --> 00:01:23,240
+So, for sparse data, it will train relatively slow.
+
+29
+00:01:23,240 --> 00:01:27,565
+I'm talking now about CatBoost version 0.6.2.
+
+30
+00:01:27,565 --> 00:01:31,630
+The project is evolving and reclaimed for many more speedups, so stay tuned.
+
+31
+00:01:31,630 --> 00:01:35,045
+Now let's talk about some ways to control training speech.
+
+32
+00:01:35,045 --> 00:01:39,785
+The first parameter I want to talk about is called RSM, random subspace melt.
+
+33
+00:01:39,785 --> 00:01:44,240
+This parameter controls the part of the features that are used to select the next split.
+
+34
+00:01:44,240 --> 00:01:47,680
+By default, this parameter is set to one but if you have many features,
+
+35
+00:01:47,680 --> 00:01:50,235
+then changing this parameter to a smaller value,
+
+36
+00:01:50,235 --> 00:01:52,395
+will probably not affect the quality.
+
+37
+00:01:52,395 --> 00:01:54,120
+It will slow down the convergence.
+
+38
+00:01:54,120 --> 00:01:57,070
+So, you need to run more iterations of gradient boosting.
+
+39
+00:01:57,070 --> 00:02:02,150
+So, setting this parameters 2.1 might speed up iteration time up to 10 times,
+
+40
+00:02:02,150 --> 00:02:08,040
+and the resulting number of iterations will increase much less by about 20 to 30 percent,
+
+41
+00:02:08,040 --> 00:02:10,565
+so the resulting training time will be smaller.
+
+42
+00:02:10,565 --> 00:02:12,200
+We optimize the algorithm to give
+
+43
+00:02:12,200 --> 00:02:16,170
+the best possible quality which comes with a cost of additional computations.
+
+44
+00:02:16,170 --> 00:02:17,645
+For example, ordered boosting,
+
+45
+00:02:17,645 --> 00:02:19,570
+or usage of several random permutations,
+
+46
+00:02:19,570 --> 00:02:22,720
+or feature combinations, it all requires additional time.
+
+47
+00:02:22,720 --> 00:02:25,070
+But there is a set of options to control that.
+
+48
+00:02:25,070 --> 00:02:26,400
+To disable ordered boosting,
+
+49
+00:02:26,400 --> 00:02:27,930
+you can start booting type two plain.
+
+50
+00:02:27,930 --> 00:02:29,850
+To disable categorical feature combinations,
+
+51
+00:02:29,850 --> 00:02:32,090
+you can set max are complexity to one,
+
+52
+00:02:32,090 --> 00:02:34,845
+or two if you don't want large combinations.
+
+53
+00:02:34,845 --> 00:02:37,250
+An important feature of CatBoost is the GPU support.
+
+54
+00:02:37,250 --> 00:02:41,300
+To use GPU training, you need to set parameter task type of the feed function to GPU.
+
+55
+00:02:41,300 --> 00:02:43,760
+CatBoost GPU training is about two times faster
+
+56
+00:02:43,760 --> 00:02:46,430
+than light GBM and 20 times faster than extra boost,
+
+57
+00:02:46,430 --> 00:02:48,040
+and it is very easy to use.
+
+58
+00:02:48,040 --> 00:02:50,900
+GPU training should be used for a large dataset.
+
+59
+00:02:50,900 --> 00:02:55,155
+Here you can see how relative speedups changes with the amount of objects in a dataset.
+
+60
+00:02:55,155 --> 00:02:57,885
+The larger the dataset, the more is the speedup.
+
+61
+00:02:57,885 --> 00:03:00,730
+On key 40, speedup is up to six times,
+
+62
+00:03:00,730 --> 00:03:04,190
+and on UR GPUs the speed-up is up to almost 50 times,
+
+63
+00:03:04,190 --> 00:03:06,310
+so it will be much faster.
+
+64
+00:03:06,310 --> 00:03:10,480
+Let's now discuss some useful features of the library you should know about.
+
+65
+00:03:10,480 --> 00:03:12,720
+The first one is the overfitting detector.
+
+66
+00:03:12,720 --> 00:03:15,500
+Gradient boosting trains the model in an iterative fashion.
+
+67
+00:03:15,500 --> 00:03:18,170
+During the training, the error reduces for your training dataset,
+
+68
+00:03:18,170 --> 00:03:19,565
+but started for some iteration
+
+69
+00:03:19,565 --> 00:03:23,720
+the generalization error will no longer reduce to detect when this happens,
+
+70
+00:03:23,720 --> 00:03:25,605
+you need to have an eval data set.
+
+71
+00:03:25,605 --> 00:03:28,030
+When the error starts growing on the eval dataset,
+
+72
+00:03:28,030 --> 00:03:31,360
+you need to stop training and overfitting detector makes that for you.
+
+73
+00:03:31,360 --> 00:03:34,265
+The second useful feature is custom metrics evaluation.
+
+74
+00:03:34,265 --> 00:03:35,510
+During the training process,
+
+75
+00:03:35,510 --> 00:03:38,330
+you can not only work on the values of the optimized flux function,
+
+76
+00:03:38,330 --> 00:03:41,515
+but also on the wells of some other metrics which you can specify.
+
+77
+00:03:41,515 --> 00:03:44,690
+For example, you could optimize will close for binary classification,
+
+78
+00:03:44,690 --> 00:03:47,210
+and look on the various of accuracy and there you see.
+
+79
+00:03:47,210 --> 00:03:49,370
+The nice thing is that you can configure
+
+80
+00:03:49,370 --> 00:03:53,185
+the overfitting detector to use symmetric other than the optimized one.
+
+81
+00:03:53,185 --> 00:03:55,220
+For example, you could again optimize log loss
+
+82
+00:03:55,220 --> 00:03:57,595
+and stop training current AAC stops improving.
+
+83
+00:03:57,595 --> 00:03:59,450
+The values of the metrics of
+
+84
+00:03:59,450 --> 00:04:03,515
+the optimized cost function can be also seen with CatBoost viewer.
+
+85
+00:04:03,515 --> 00:04:05,210
+If you use Jupiter notebook.
+
+86
+00:04:05,210 --> 00:04:07,960
+You could use plot equals true parameter to see them.
+
+87
+00:04:07,960 --> 00:04:09,335
+You can see an example here.
+
+88
+00:04:09,335 --> 00:04:12,575
+On this graph, the optimized loss function log loss is possible by default,
+
+89
+00:04:12,575 --> 00:04:16,970
+but you can switch to a curious it up to see how it changes in the process of training.
+
+90
+00:04:16,970 --> 00:04:19,830
+The best eval iteration is shown by a dot.
+
+91
+00:04:19,830 --> 00:04:24,010
+Also, you can see pastime and estimated time left.
+
+92
+00:04:24,010 --> 00:04:27,755
+It is possible for CatBoost to estimate the time of training because
+
+93
+00:04:27,755 --> 00:04:31,125
+it goes trees of similar size on each iteration.
+
+94
+00:04:31,125 --> 00:04:35,360
+Visualization support zooming moving to logarithmic scale.
+
+95
+00:04:35,360 --> 00:04:38,160
+If you are experimenting using R or command-line utility,
+
+96
+00:04:38,160 --> 00:04:40,315
+you could use a standalone CatBoost viewer tool.
+
+97
+00:04:40,315 --> 00:04:42,015
+This tool has the same functionality,
+
+98
+00:04:42,015 --> 00:04:44,255
+but opens in a separate browser tab.
+
+99
+00:04:44,255 --> 00:04:47,060
+Same graphs can be plotted using TensorBoard.
+
+100
+00:04:47,060 --> 00:04:51,530
+This also possible to write your own metric or loss function in Python or C plus plus.
+
+101
+00:04:51,530 --> 00:04:53,780
+It is more efficient to write it in C plus plus.
+
+102
+00:04:53,780 --> 00:04:57,395
+Our GitHub.repo contains tutorials for that.
+
+103
+00:04:57,395 --> 00:04:59,115
+Next important thing to know about,
+
+104
+00:04:59,115 --> 00:05:00,580
+is non-feature values support.
+
+105
+00:05:00,580 --> 00:05:03,820
+A very common situation is that your data has some missing feature values.
+
+106
+00:05:03,820 --> 00:05:06,180
+The algorithm can deal with this in the following way.
+
+107
+00:05:06,180 --> 00:05:09,645
+For categorical features non-values are treated as a separate category.
+
+108
+00:05:09,645 --> 00:05:14,105
+For numeric features non-values are substituted with the variable that is either greater,
+
+109
+00:05:14,105 --> 00:05:15,930
+or less than all other values,
+
+110
+00:05:15,930 --> 00:05:19,400
+and it is guaranteed that when using internal split selection procedure,
+
+111
+00:05:19,400 --> 00:05:23,255
+the algorithm will consider putting the objects with non-values in a separate leaf.
+
+112
+00:05:23,255 --> 00:05:25,630
+The library also implements cross validation.
+
+113
+00:05:25,630 --> 00:05:28,925
+What you need to know is that it allows for early stopping of the training with
+
+114
+00:05:28,925 --> 00:05:34,490
+overfitting detector when the average evolved error among all four stops improving.
+
+115
+00:05:34,490 --> 00:05:38,660
+Another useful feature is stage predict and metric evaluation mode.
+
+116
+00:05:38,660 --> 00:05:40,670
+The stage predict calculates the variance of
+
+117
+00:05:40,670 --> 00:05:43,070
+the model on every iteration for a given dataset,
+
+118
+00:05:43,070 --> 00:05:44,885
+and the measure calculation mode calculates
+
+119
+00:05:44,885 --> 00:05:48,765
+the metric values on every iteration for this dataset.
+
+120
+00:05:48,765 --> 00:05:52,405
+In CatBoost, there are several ways to explore the feature importances.
+
+121
+00:05:52,405 --> 00:05:56,610
+First of all, it is possible to see which features are the most important in the model.
+
+122
+00:05:56,610 --> 00:05:58,520
+You also can see which features are the most
+
+123
+00:05:58,520 --> 00:06:01,790
+influential for given objects or for a given set of objects.
+
+124
+00:06:01,790 --> 00:06:04,960
+Finally, you can look on future interaction for previous features.
+
+125
+00:06:04,960 --> 00:06:11,505
+So, now let's talk about some parameters that can affect resulting quality of a model.
+
+126
+00:06:11,505 --> 00:06:13,475
+The first one is learning rate.
+
+127
+00:06:13,475 --> 00:06:14,970
+The rule is the following.
+
+128
+00:06:14,970 --> 00:06:17,150
+The least is the learning rate the more iterations you
+
+129
+00:06:17,150 --> 00:06:19,570
+need to and the better the quality you get in the end.
+
+130
+00:06:19,570 --> 00:06:21,860
+The second parameter is the depth of the tree.
+
+131
+00:06:21,860 --> 00:06:24,945
+But the default value is six and it is a good value,
+
+132
+00:06:24,945 --> 00:06:28,035
+but for some datasets you need deeper trees.
+
+133
+00:06:28,035 --> 00:06:30,190
+L2 regularization is also important,
+
+134
+00:06:30,190 --> 00:06:32,920
+you can play with it to reduce overfitting.
+
+135
+00:06:32,920 --> 00:06:36,005
+The next parameter controls bagging intensity.
+
+136
+00:06:36,005 --> 00:06:37,240
+The higher the temperature,
+
+137
+00:06:37,240 --> 00:06:39,365
+the more aggressive the sampling is.
+
+138
+00:06:39,365 --> 00:06:41,645
+You can also change the bootstrap type.
+
+139
+00:06:41,645 --> 00:06:44,570
+Finally, there is a parameter that is called random strength,
+
+140
+00:06:44,570 --> 00:06:47,510
+it is also important for model quality.
+
+141
+00:06:47,510 --> 00:06:51,005
+When selecting best split for tree algorithm uses some randomness.
+
+142
+00:06:51,005 --> 00:06:53,040
+This helps to reduce overfitting.
+
+143
+00:06:53,040 --> 00:06:56,240
+The perimeter can regulate how much randomness should be used.
+
+144
+00:06:56,240 --> 00:06:59,725
+To forbid randomness, you can set this parameter to zero.
+
+145
+00:06:59,725 --> 00:07:02,240
+The most recent information about parameter tuning can
+
+146
+00:07:02,240 --> 00:07:05,015
+be found on our documentation page.
+
+147
+00:07:05,015 --> 00:07:07,160
+Thank you for watching this video,
+
+148
+00:07:07,160 --> 00:07:11,100
+I hope the library will be useful for you. Good luck.

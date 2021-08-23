@@ -1,0 +1,684 @@
+1
+00:00:04,189 --> 00:00:05,990
+Hi, my name is Anna Veronika.
+
+2
+00:00:05,990 --> 00:00:08,870
+And in this video,
+I will tell you about CatBoost,
+
+3
+00:00:08,870 --> 00:00:12,380
+a great linguistic library that
+we are developing at Yandex.
+
+4
+00:00:12,380 --> 00:00:16,350
+CatBoost is an open source project,
+so you are very welcome to use it.
+
+5
+00:00:16,350 --> 00:00:19,560
+In this video, I will first tell
+you how CatBoost compares to other
+
+6
+00:00:19,560 --> 00:00:22,450
+gradient boosting algorithms
+in terms of quality.
+
+7
+00:00:22,450 --> 00:00:24,560
+Then we will go into
+details of the algorithm.
+
+8
+00:00:24,560 --> 00:00:28,290
+We will discuss main problems that
+arise when using gradient boosting and
+
+9
+00:00:28,290 --> 00:00:31,750
+the ways we try to solve
+these problems in CatBoost.
+
+10
+00:00:31,750 --> 00:00:34,890
+After that we will talk about some
+useful features of the library and
+
+11
+00:00:34,890 --> 00:00:37,570
+about the most important
+training parameters.
+
+12
+00:00:37,570 --> 00:00:40,840
+Let's start with some motivation
+which I hope will make you want
+
+13
+00:00:40,840 --> 00:00:43,120
+to try the library on your data.
+
+14
+00:00:43,120 --> 00:00:46,460
+Here, you can see the comparison of
+CatBoost with other openly available great
+
+15
+00:00:46,460 --> 00:00:52,760
+boosting libraries, LightGBM, XGBoost and
+H2O on several openly available data sets.
+
+16
+00:00:52,760 --> 00:00:58,430
+These are data sets from computations and
+data set the commonly known data set.
+
+17
+00:00:58,430 --> 00:01:01,536
+We've open sourced the code
+of algorithms comparison, so
+
+18
+00:01:01,536 --> 00:01:04,270
+that you can reproduce results yourself.
+
+19
+00:01:04,270 --> 00:01:05,030
+As you can see,
+
+20
+00:01:05,030 --> 00:01:09,700
+CatBoost beats all other libraries in
+terms of quality on these data sets.
+
+21
+00:01:09,700 --> 00:01:12,830
+These numbers are the results
+of comparison of the algorithms
+
+22
+00:01:12,830 --> 00:01:14,320
+after parameter tuning.
+
+23
+00:01:14,320 --> 00:01:18,050
+Actually, and you can see that in
+our benchmarks on GitHub, CatBoost,
+
+24
+00:01:18,050 --> 00:01:22,660
+without any parameter tuning, beats the
+tuned algorithms in all cases except one
+
+25
+00:01:22,660 --> 00:01:27,030
+where tuned LightGBM is slightly
+better than not tuned CatBoost.
+
+26
+00:01:27,030 --> 00:01:31,270
+This is because CatBoost is very
+stable to hyper parameter changes.
+
+27
+00:01:31,270 --> 00:01:36,440
+Now let me outline the main problems that
+can arise when using radian boosting.
+
+28
+00:01:36,440 --> 00:01:39,650
+In CatBoost,
+we have put a lot of effort to solve them.
+
+29
+00:01:39,650 --> 00:01:43,510
+The first problem is that the existing
+with gradient boosting libraries have
+
+30
+00:01:43,510 --> 00:01:46,170
+not optimal support or no support for
+
+31
+00:01:46,170 --> 00:01:51,180
+categorical features, a very natural
+type of data that arises in many tasks.
+
+32
+00:01:51,180 --> 00:01:54,390
+To handle them,
+you need to do advanced processing.
+
+33
+00:01:54,390 --> 00:01:58,520
+The second problem is that, if you train
+your model with default parameters,
+
+34
+00:01:58,520 --> 00:02:00,580
+you usually get a very bad result.
+
+35
+00:02:00,580 --> 00:02:03,010
+To get the good model,
+you need to do hyperparameter.
+
+36
+00:02:04,350 --> 00:02:07,820
+The next problem arises in
+time critical applications and
+
+37
+00:02:07,820 --> 00:02:09,430
+it is the prediction speed.
+
+38
+00:02:09,430 --> 00:02:10,820
+If prediction speed is important,
+
+39
+00:02:10,820 --> 00:02:13,879
+then some people don't use gradient
+boosting and use simple models.
+
+40
+00:02:14,960 --> 00:02:16,932
+The next problem is overfitting.
+
+41
+00:02:16,932 --> 00:02:19,110
+Gradient boosting is prone to overfitting,
+
+42
+00:02:19,110 --> 00:02:21,850
+which affects the resulting
+quality of the model.
+
+43
+00:02:21,850 --> 00:02:23,820
+And the last on this list
+is the training speed.
+
+44
+00:02:23,820 --> 00:02:27,640
+It is especially important for
+large data sets when you need to wait for
+
+45
+00:02:27,640 --> 00:02:30,340
+hours or even days for
+the training to finish.
+
+46
+00:02:30,340 --> 00:02:32,950
+It is important to make
+training as fast as possible.
+
+47
+00:02:34,370 --> 00:02:37,180
+Let's start with a discussion
+of categorical features.
+
+48
+00:02:37,180 --> 00:02:39,680
+Because the sophisticated
+categorical feature support
+
+49
+00:02:39,680 --> 00:02:42,090
+is a major advantage of the library.
+
+50
+00:02:42,090 --> 00:02:44,920
+Gradient boosting is a machine learning
+technique that works great for
+
+51
+00:02:44,920 --> 00:02:47,930
+heterogeneous data, or
+data from different sources.
+
+52
+00:02:47,930 --> 00:02:52,040
+When working with heterogenous data,
+we usually have numerical data and
+
+53
+00:02:52,040 --> 00:02:53,390
+categorical data.
+
+54
+00:02:53,390 --> 00:02:56,440
+An example, if numerical data is height,
+it is a number.
+
+55
+00:02:56,440 --> 00:02:59,750
+And thus, its values can be
+compared with each other.
+
+56
+00:02:59,750 --> 00:03:02,370
+Numerical data can be easily
+used in decision trees.
+
+57
+00:03:03,440 --> 00:03:07,430
+In practice, however, when data
+sets include categorical features,
+
+58
+00:03:07,430 --> 00:03:09,680
+which are also important for predictions.
+
+59
+00:03:09,680 --> 00:03:13,080
+Categorical feature is a feature
+having a discrete set of values
+
+60
+00:03:13,080 --> 00:03:15,790
+that are not necessarily
+comparable with each other.
+
+61
+00:03:15,790 --> 00:03:19,029
+An example for that could be user ID,
+or name of a city.
+
+62
+00:03:20,130 --> 00:03:23,340
+The most commonly used practice for
+dealing with categorical features and
+
+63
+00:03:23,340 --> 00:03:26,440
+gradient boosting is replacing
+them with some numerical features
+
+64
+00:03:26,440 --> 00:03:28,230
+during the processing stage.
+
+65
+00:03:28,230 --> 00:03:31,010
+Let me introduce the techniques
+that are used in CatBoost
+
+66
+00:03:31,010 --> 00:03:32,560
+to deal with categorical features.
+
+67
+00:03:34,190 --> 00:03:37,441
+The most widely used technique
+which is usually applied to low
+
+68
+00:03:37,441 --> 00:03:40,050
+categorical features is One-hot encoding.
+
+69
+00:03:40,050 --> 00:03:42,060
+The original feature is removed, and
+
+70
+00:03:42,060 --> 00:03:45,350
+a new binary or
+variable is added for each category.
+
+71
+00:03:45,350 --> 00:03:46,533
+By reading and boosting,
+
+72
+00:03:46,533 --> 00:03:50,272
+component coding can be done during the
+pre possessing phase or during training.
+
+73
+00:03:50,272 --> 00:03:54,210
+However, it can be implemented more
+efficiently in terms of training time,
+
+74
+00:03:54,210 --> 00:03:55,595
+which we've done in the library.
+
+75
+00:03:55,595 --> 00:03:58,730
+By default,
+CatBoost uses one-hot encoding for
+
+76
+00:03:58,730 --> 00:04:01,950
+features with small number
+of different values.
+
+77
+00:04:01,950 --> 00:04:05,310
+This can be controlled with
+one_hot_max_size parameter.
+
+78
+00:04:05,310 --> 00:04:08,780
+Another way that we've implemented
+is using number of appearances
+
+79
+00:04:08,780 --> 00:04:11,220
+of category in the data
+set as a new feature.
+
+80
+00:04:11,220 --> 00:04:13,270
+This is a simple but powerful technique.
+
+81
+00:04:15,070 --> 00:04:18,720
+One more way to deal with categorical
+features is to compute some statistic
+
+82
+00:04:18,720 --> 00:04:21,070
+using the label values of the object.
+
+83
+00:04:21,070 --> 00:04:25,140
+And that is the most powerful technique
+in terms of resulting quality.
+
+84
+00:04:25,140 --> 00:04:28,060
+The simplest way is to
+substitute the category with
+
+85
+00:04:28,060 --> 00:04:30,670
+value on the whole train data set.
+
+86
+00:04:30,670 --> 00:04:33,070
+This procedure leads to.
+
+87
+00:04:33,070 --> 00:04:35,790
+For example, if there is a single object
+from the category in the whole training
+
+88
+00:04:35,790 --> 00:04:38,410
+data set, then the new
+numerical feature value will be
+
+89
+00:04:38,410 --> 00:04:40,960
+equal to the label value of this example.
+
+90
+00:04:40,960 --> 00:04:44,180
+A straightforward way to overcome this
+problem is to partition the data set
+
+91
+00:04:44,180 --> 00:04:47,940
+into two parts, and use one part to
+only calculate the statistics, and
+
+92
+00:04:47,940 --> 00:04:49,900
+the second part to perform training.
+
+93
+00:04:49,900 --> 00:04:53,380
+This reduces over fitting, but
+it also reduces the amount of data
+
+94
+00:04:53,380 --> 00:04:56,352
+used to train the model and
+to calculate the statistics.
+
+95
+00:04:56,352 --> 00:04:59,860
+CatBoost uses a more efficient strategy,
+which reduces overfitting and
+
+96
+00:04:59,860 --> 00:05:02,420
+allows to use the whole data set for
+training.
+
+97
+00:05:02,420 --> 00:05:05,774
+Namely, we perform a random
+permutation of the data set and for
+
+98
+00:05:05,774 --> 00:05:09,889
+each object we can get [INAUDIBLE] value
+and more objects with the same category
+
+99
+00:05:09,889 --> 00:05:13,490
+value placed before the given
+object in the permutation.
+
+100
+00:05:13,490 --> 00:05:16,420
+It also helps to use other statistics,
+not only error target.
+
+101
+00:05:17,450 --> 00:05:19,740
+One more trick is to use
+several permutations.
+
+102
+00:05:19,740 --> 00:05:22,930
+However, a straightforward
+statistics computed for
+
+103
+00:05:22,930 --> 00:05:25,191
+several permutations
+will lead to overfitting.
+
+104
+00:05:25,191 --> 00:05:29,396
+To use several permutations, CatBoost
+train's several models simultaneously,
+
+105
+00:05:29,396 --> 00:05:33,007
+each of which is trained on a separate
+permutation and uses this model for
+
+106
+00:05:33,007 --> 00:05:34,870
+tree structure selection.
+
+107
+00:05:34,870 --> 00:05:38,040
+Note that any combination of several
+categorical features could be considered
+
+108
+00:05:38,040 --> 00:05:38,800
+as a new one.
+
+109
+00:05:38,800 --> 00:05:41,670
+For example, assume that
+the task is music foundation and
+
+110
+00:05:41,670 --> 00:05:44,750
+we have two categorical features,
+user ID and musical genre.
+
+111
+00:05:44,750 --> 00:05:47,650
+Some user prefer say rock music.
+
+112
+00:05:47,650 --> 00:05:49,110
+When we convert user ID and
+
+113
+00:05:49,110 --> 00:05:52,510
+musical genre to numerical features,
+we lose this information.
+
+114
+00:05:52,510 --> 00:05:55,150
+And a combination of two
+features solve this problems and
+
+115
+00:05:55,150 --> 00:05:57,270
+gives a new powerful feature.
+
+116
+00:05:57,270 --> 00:06:00,455
+However, the number of combinations
+grows exponentially with the number of
+
+117
+00:06:00,455 --> 00:06:02,180
+categorical features in the data set, and
+
+118
+00:06:02,180 --> 00:06:05,390
+it is not possible to consider
+all of them in the algorithm.
+
+119
+00:06:05,390 --> 00:06:06,880
+When constructing a new split for
+
+120
+00:06:06,880 --> 00:06:10,680
+the current tree, CatBoost considers
+combinations in a greedy way.
+
+121
+00:06:10,680 --> 00:06:13,060
+Thus, it considers only
+some good combinations.
+
+122
+00:06:13,060 --> 00:06:18,460
+CatBoost also generates combinations
+of numerical and categorical features.
+
+123
+00:06:18,460 --> 00:06:21,580
+Let's now discuss the next major
+difference between CatBoost and
+
+124
+00:06:21,580 --> 00:06:22,640
+other libraries.
+
+125
+00:06:22,640 --> 00:06:25,398
+It is the kind trees CatBoost
+is using as base predictors,
+
+126
+00:06:25,398 --> 00:06:28,351
+although libraries use
+different kind of trees.
+
+127
+00:06:28,351 --> 00:06:32,333
+Builds trees node by node,
+eating them in a greedy fashion.
+
+128
+00:06:32,333 --> 00:06:35,537
+This way, you can get a deep
+[INAUDIBLE] binary tree.
+
+129
+00:06:35,537 --> 00:06:40,350
+Also builds but it builds them layer
+by layer and then prunes them.
+
+130
+00:06:40,350 --> 00:06:42,370
+So they cannot get very deep.
+
+131
+00:06:42,370 --> 00:06:43,770
+CatBoost uses symmetric trees.
+
+132
+00:06:43,770 --> 00:06:47,360
+The trees where all nodes on the same
+layer contain the same split.
+
+133
+00:06:47,360 --> 00:06:51,020
+These trees are more simple predictors
+which make the algorithm more stable
+
+134
+00:06:51,020 --> 00:06:51,980
+to overfitting.
+
+135
+00:06:51,980 --> 00:06:54,820
+They also make the algorithm more
+stable to hyperparameter changes,
+
+136
+00:06:54,820 --> 00:06:58,350
+which means that training with default
+parameters will give a good model, and
+
+137
+00:06:58,350 --> 00:07:01,620
+you can reduce the time spent
+on tuning hyperparameters.
+
+138
+00:07:01,620 --> 00:07:05,100
+This type of trees also ask for
+a very fast model predictions.
+
+139
+00:07:05,100 --> 00:07:09,036
+CatBoost model prediction is 30 to
+60 times faster than those of and
+
+140
+00:07:09,036 --> 00:07:11,514
+extra boost in both single and
+multithread mode.
+
+141
+00:07:12,580 --> 00:07:14,840
+Thus categorical data supports and
+
+142
+00:07:14,840 --> 00:07:19,400
+usage of symmetric trees are two
+first major features of CatBoost.
+
+143
+00:07:19,400 --> 00:07:21,745
+We'll talk about other
+features in the next video.
+
+144
+00:07:21,745 --> 00:07:24,376
+[SOUND]
+
+145
+00:07:24,376 --> 00:07:34,376
+[MUSIC]
